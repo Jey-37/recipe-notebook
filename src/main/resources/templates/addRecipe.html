@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Recipe</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/styles/styles1.css}">
+</head>
+<body>
+    <main>
+        <h1>Додайте рецепт</h1>
+        <form method="post" action="#" th:action="@{/recipes/add}" th:object="${recipe}">
+            <table id="recipe-head-table">
+                <tr>
+                    <td><label th:for="${#ids.next('name')}">Назва:</label></td>
+                    <td><input type="text" th:field="*{name}"
+                               placeholder="Введіть назву страви"/></td>
+                    <td><span class="validationError"
+                              th:if="${#fields.hasErrors('name')}"
+                              th:errors="*{name}">Recipe Name Error</span></td>
+                </tr>
+                <tr>
+                    <td><label th:for="${#ids.next('portionsNumber')}">Кількість порцій:</label></td>
+                    <td><input type="number" th:field="*{portionsNumber}" value="1" min="1" max="25"
+                               placeholder="Введіть число порцій"/></td>
+                    <td><span class="validationError"
+                              th:if="${#fields.hasErrors('portionsNumber')}"
+                              th:errors="*{portionsNumber}">Portions Number Error</span></td>
+                </tr>
+            </table>
+            <section id="ingredients-block">
+                <h3>Інгредієнти</h3>
+                <div class="dropdown">
+                    <input id="ingredient-search" type="search" name="model"
+                           autocomplete="off"
+                           placeholder="Почніть вводити інгредієнт..."/>
+                    <div class="dropdown-content">
+                        <ul class="dropdown-results-list"></ul>
+                    </div>
+                </div>
+
+                <table id="ingredients-table">
+                    <!--tr>
+                        <td>Інгредієнт</td>
+                        <td><input type="text" size="6" placeholder="Кількість"
+                                   pattern="(?:[1-9]\d*|(?:0|[1-9]\d*)[\.,]\d|[1-9][\/\\][1-9])"></td>
+                        <td>
+                            <select class="ing-measure-select">
+                                <option>кг</option>
+                                <option>г</option>
+                                <option>шт.</option>
+                            </select>
+                        </td>
+                        <td><input type="text" placeholder="Примітка"></td>
+                    </tr-->
+                    <tr th:each="recipeIngred, itr : ${recipe.recipeIngredients}">
+                        <!--input type="hidden" th:field="${recipeIngred.ingredient.id}"-->
+                        <td th:text="${recipeIngred.ingredient.name}">Інгредієнт</td>
+                        <td>
+                            <input th:id="|recipeIngred[${itr.index}].quantity|"
+                                   th:name="|recipeIngred[${itr.index}].quantity|"
+                                   th:value="${recipeIngred.quantity}"
+                                   type="text" size="6" placeholder="Кількість">
+                        </td>
+                        <td>
+                            <select class="ing-measure-select"
+                                    th:id="|recipeIngred[${itr.index}].measure|"
+                                    th:name="|recipeIngred[${itr.index}].measure|"
+                                    th:value="${recipeIngred.measure.title}">
+                                <option th:each="meas : ${recipeIngred.ingredient.type.measures}"
+                                        th:text="${meas.title}"></option>
+                            </select>
+                        </td>
+                        <td><input th:id="|recipeIngred[${itr.index}].note|"
+                                   th:name="|recipeIngred[${itr.index}].note|"
+                                   th:value="${recipeIngred.note}"
+                                   type="text" placeholder="Примітка"></td>
+                    </tr>
+                </table>
+            </section>
+            <section>
+                <h3>Етапи</h3>
+                <textarea th:each="stage : ${recipe.stages}"
+                    th:field="*{stages}" ></textarea>
+            </section>
+            <input type="submit" value="Надіслати рецепт">
+        </form>
+    </main>
+    <script th:src="@{/scripts/scripts1.js}"></script>
+</body>
+</html>
