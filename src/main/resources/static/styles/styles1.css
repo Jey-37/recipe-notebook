@@ -37,6 +37,16 @@ body {
     margin: 0;
 }
 
+.remove-ingredient-btn, .remove-stage-btn {
+    background-color: transparent;
+    padding: 0;
+    border-style: none;
+}
+
+.remove-ingredient-btn:hover, .remove-stage-btn:hover {
+    cursor: pointer;
+}
+
 main {
     min-width: 640px;
     max-width: 864px;
@@ -48,17 +58,26 @@ main {
 
 .dropdown {
     position: relative;
-    display: inline-block;
+    height: 1.5em;
+    width: 200px;
+}
+
+#ingredient-search {
+    position: absolute;
+    z-index: 2;
+    height: 1.5em;
+    width: 100%;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
+    top: 1.5em;
     width: 100%;
     max-height: 15em;
     overflow: auto;
     background-color: white;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.4);
     z-index: 1;
 }
 
@@ -79,5 +98,43 @@ main {
 
 #ingredients-table {
     margin: 15px;
+    empty-cells: hide;
 }
 
+#ingredients-table td {
+    padding-right: 10px;
+    height: 2em;
+}
+
+#ingredients-table td:first-child {
+    display: none;
+}
+
+#ingredients-table select {
+    width: 5.5em;
+}
+
+.ing-name-cell {
+    width: 12em;
+}
+
+.stage-input-area {
+    resize: none;
+    height: 6em;
+    width: 30em;
+}
+
+.number-input {
+    text-align: right;
+}
+
+#tags-block {
+    height: 150px;
+    display: inline-flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.tag-wrapper {
+    width: 12em;
+}

@@ -13,6 +13,16 @@ ingredSearchField.addEventListener("focusout", () => {
 
 resList.addEventListener("click", addIngredient);
 
+const rmvIngButtons = document.getElementsByClassName("remove-ingredient-btn");
+for (let i = 0; i < rmvIngButtons.length; i++) {
+    rmvIngButtons.item(i).addEventListener("click", removeIngredientRow);
+}
+
+const rmvStageButtons = document.getElementsByClassName("remove-stage-btn");
+for (let i = 0; i < rmvStageButtons.length; i++) {
+    rmvStageButtons.item(i).addEventListener("click", removeStage);
+}
+
 
 function seekIngredient() {
     let searchQuery = ingredSearchField.value;
@@ -58,7 +68,16 @@ function createIngredientTableRow(ingredient) {
 
     const ingNameCell = document.createElement("td");
     ingNameCell.innerText = ingredient.name;
-    //const ingName
 
     ingredientTableRow.append(ingNameCell);
+}
+
+function removeIngredientRow(evt) {
+    evt.stopPropagation();
+    evt.target.parentNode.parentElement.remove();
+}
+
+function removeStage(evt) {
+    evt.stopPropagation();
+    evt.target.parentNode.parentElement.remove();
 }

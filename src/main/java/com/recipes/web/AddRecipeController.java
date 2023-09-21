@@ -77,6 +77,7 @@ public class AddRecipeController
         recipe.setRecipeIngredients(recIngreds);
 
         model.addAttribute("recipe", recipe);
+        model.addAttribute("tags", tags);
 
         return "addRecipe";
     }

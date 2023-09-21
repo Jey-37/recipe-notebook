@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Recipe</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/styles/styles1.css}">
+    <title>Додайте рецепт</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles/styles1.css" th:href="@{/styles/styles1.css}">
 </head>
 <body>
     <main>
@@ -39,52 +39,62 @@
                 </div>
 
                 <table id="ingredients-table">
-                    <!--tr>
-                        <td>Інгредієнт</td>
-                        <td><input type="text" size="6" placeholder="Кількість"
-                                   pattern="(?:[1-9]\d*|(?:0|[1-9]\d*)[\.,]\d|[1-9][\/\\][1-9])"></td>
+                    <tr th:each="recipeIngred, itr : *{recipeIngredients}">
                         <td>
-                            <select class="ing-measure-select">
-                                <option>кг</option>
-                                <option>г</option>
-                                <option>шт.</option>
-                            </select>
+                            <input type="hidden" th:value="${recipeIngred.ingredient.id}">
                         </td>
-                        <td><input type="text" placeholder="Примітка"></td>
-                    </tr-->
-                    <tr th:each="recipeIngred, itr : ${recipe.recipeIngredients}">
-                        <!--input type="hidden" th:field="${recipeIngred.ingredient.id}"-->
-                        <td th:text="${recipeIngred.ingredient.name}">Інгредієнт</td>
+                        <td th:text="${recipeIngred.ingredient.name}"
+                            class="ing-name-cell">Інгредієнт</td>
                         <td>
-                            <input th:id="|recipeIngred[${itr.index}].quantity|"
-                                   th:name="|recipeIngred[${itr.index}].quantity|"
-                                   th:value="${recipeIngred.quantity}"
+                            <input th:field="*{recipeIngredients[__${itr.index}__].quantity}"
+                                   class="number-input"
                                    type="text" size="6" placeholder="Кількість">
                         </td>
                         <td>
                             <select class="ing-measure-select"
-                                    th:id="|recipeIngred[${itr.index}].measure|"
-                                    th:name="|recipeIngred[${itr.index}].measure|"
-                                    th:value="${recipeIngred.measure.title}">
+                                    th:field="*{recipeIngredients[__${itr.index}__].measure}">
                                 <option th:each="meas : ${recipeIngred.ingredient.type.measures}"
-                                        th:text="${meas.title}"></option>
+                                        th:text="${meas.title}" th:value="${meas.id}">кг</option>
                             </select>
                         </td>
-                        <td><input th:id="|recipeIngred[${itr.index}].note|"
-                                   th:name="|recipeIngred[${itr.index}].note|"
-                                   th:value="${recipeIngred.note}"
-                                   type="text" placeholder="Примітка"></td>
+                        <td>
+                            <input th:field="*{recipeIngredients[__${itr.index}__].note}"
+                                   type="text" placeholder="Примітка">
+                        </td>
+                        <td>
+                            <button type="button" class="remove-ingredient-btn">❌</button>
+                        </td>
                     </tr>
                 </table>
             </section>
             <section>
-                <h3>Етапи</h3>
-                <textarea th:each="stage : ${recipe.stages}"
-                    th:field="*{stages}" ></textarea>
+                <h3>Етапи приготування</h3>
+                <table id="stages-table">
+                    <tr th:each="stage, itr : *{stages}">
+                        <td>
+                            <textarea class="stage-input-area" th:field="*{stages[__${itr.index}__]}"
+                                    placeholder="Введіть вказівки з приготування"></textarea>
+                        </td>
+                        <td>
+                            <button type="button" class="remove-stage-btn">❌</button>
+                        </td>
+                    </tr>
+                </table>
+                <button type="button" id="add-stage-btn">Додати етап</button>
+            </section>
+            <section>
+                <h3>Категорії страви</h3>
+                <div id="tags-block">
+                    <div class="tag-wrapper" th:each="tag : ${tags}">
+                        <input type="checkbox" th:field="*{tags}" th:value="${tag.id}">
+                        <label th:for="${#ids.prev('tags')}"
+                               th:text="${tag.name}">Tag</label>
+                    </div>
+                </div>
             </section>
             <input type="submit" value="Надіслати рецепт">
         </form>
     </main>
-    <script th:src="@{/scripts/scripts1.js}"></script>
+    <script src="/static/scripts/scripts1.js" th:src="@{/scripts/scripts1.js}"></script>
 </body>
 </html>

@@ -7,7 +7,8 @@ VALUES ('Vasil');
 
 INSERT INTO tags (name)
 VALUES ('Перша страва'), ('Друга страва'), ('Десерт'), ('М''ясо'),
-       ('Випічка'), ('Паста'), ('Каша'), ('Салат'), ('Консервація');
+       ('Випічка'), ('Паста'), ('Каша'), ('Салат'), ('Консервація'),
+       ('Риба'), ('Запіканка');
 
 INSERT INTO ingredient_types (title)
 VALUES ('liquid'), ('thick liquid'), ('weightable'), ('pieces'),
