@@ -19,15 +19,7 @@ public class IngredientsController
     }
 
     @GetMapping
-    public Iterable<Ingredient> getIngredients(@RequestParam(name = "query") String searchQuery) {
-        return StreamSupport.stream(repo.findAll().spliterator(), false)
-                .filter(ing -> ingredientFilter(ing, searchQuery)).collect(Collectors.toList());
-    }
-
-    private boolean ingredientFilter(Ingredient ing, String searchQuery) {
-        searchQuery = searchQuery.toLowerCase();
-        String iName = ing.getName().toLowerCase();
-
-        return iName.startsWith(searchQuery) || iName.contains(" "+searchQuery);
+    public Iterable<Ingredient> getAllIngredients() {
+        return repo.findAll();
     }
 }
