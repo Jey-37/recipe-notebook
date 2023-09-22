@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS recipes_ingredients (
     rec_id BIGINT NOT NULL,
     ing_id INT NOT NULL,
     meas_id INT NOT NULL,
-    quantity DECIMAL(10,2),
+    quantity DECIMAL(5,1),
     note VARCHAR(60),
     PRIMARY KEY (rec_id, ing_id),
     FOREIGN KEY (rec_id) REFERENCES recipes (id) ON DELETE CASCADE,

@@ -46,23 +46,23 @@
                         <td th:text="${recipeIngred.ingredient.name}"
                             class="ing-name-cell">Інгредієнт</td>
                         <td>
-                            <input th:field="*{recipeIngredients[__${itr.index}__].quantity}"
-                                   class="number-input"
-                                   type="text" size="6" placeholder="Кількість">
+                            <input th:field="*{recipeIngredientsAsList[__${itr.index}__].quantity}"
+                                   class="number-input" type="text" size="6" maxlength="6" placeholder="Кількість"
+                                   pattern=" *(?:[1-9]\d*|(?:0|[1-9]\d*)[\.,]\d) *">
                         </td>
                         <td>
                             <select class="ing-measure-select"
-                                    th:field="*{recipeIngredients[__${itr.index}__].measure}">
+                                    th:field="*{recipeIngredientsAsList[__${itr.index}__].measure}">
                                 <option th:each="meas : ${recipeIngred.ingredient.type.measures}"
                                         th:text="${meas.title}" th:value="${meas.id}">кг</option>
                             </select>
                         </td>
                         <td>
-                            <input th:field="*{recipeIngredients[__${itr.index}__].note}"
-                                   type="text" placeholder="Примітка">
+                            <input th:field="*{recipeIngredientsAsList[__${itr.index}__].note}"
+                                   type="text" placeholder="Примітка" maxlength="20">
                         </td>
                         <td>
-                            <button type="button" class="remove-ingredient-btn">❌</button>
+                            <button type="button" class="remove-ingredient-btn" tabindex="-1">❌</button>
                         </td>
                     </tr>
                 </table>
@@ -76,7 +76,7 @@
                                     placeholder="Введіть вказівки з приготування"></textarea>
                         </td>
                         <td>
-                            <button type="button" class="remove-stage-btn">❌</button>
+                            <button type="button" class="remove-stage-btn" tabindex="-1">❌</button>
                         </td>
                     </tr>
                 </table>
