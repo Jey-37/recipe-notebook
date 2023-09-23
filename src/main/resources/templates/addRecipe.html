@@ -39,26 +39,26 @@
                 </div>
 
                 <table id="ingredients-table">
-                    <tr th:each="recipeIngred, itr : *{recipeIngredients}">
+                    <tr th:each="ingred, itr : *{ingredients}">
                         <td>
-                            <input type="hidden" th:value="${recipeIngred.ingredient.id}">
+                            <input type="hidden" th:field="*{ingredients[__${itr.index}__].ingredient.id}">
                         </td>
-                        <td th:text="${recipeIngred.ingredient.name}"
+                        <td th:text="${ingred.ingredient.name}"
                             class="ing-name-cell">Інгредієнт</td>
                         <td>
-                            <input th:field="*{recipeIngredientsAsList[__${itr.index}__].quantity}"
+                            <input th:field="*{ingredients[__${itr.index}__].quantity}"
                                    class="number-input" type="text" size="6" maxlength="6" placeholder="Кількість"
                                    pattern=" *(?:[1-9]\d*|(?:0|[1-9]\d*)[\.,]\d) *">
                         </td>
                         <td>
                             <select class="ing-measure-select"
-                                    th:field="*{recipeIngredientsAsList[__${itr.index}__].measure}">
-                                <option th:each="meas : ${recipeIngred.ingredient.type.measures}"
+                                    th:field="*{ingredients[__${itr.index}__].measureId}">
+                                <option th:each="meas : ${ingred.ingredient.type.measures}"
                                         th:text="${meas.title}" th:value="${meas.id}">кг</option>
                             </select>
                         </td>
                         <td>
-                            <input th:field="*{recipeIngredientsAsList[__${itr.index}__].note}"
+                            <input th:field="*{ingredients[__${itr.index}__].note}"
                                    type="text" placeholder="Примітка" maxlength="20">
                         </td>
                         <td>

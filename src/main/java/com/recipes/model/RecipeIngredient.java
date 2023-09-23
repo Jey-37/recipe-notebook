@@ -1,13 +1,8 @@
 package com.recipes.model;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 @Data
@@ -29,7 +24,6 @@ public class RecipeIngredient
     @JoinColumn(name = "meas_id")
     private Measure measure;
 
-    @JsonDeserialize(using = QuantityDeserializer.class)
     private double quantity;
 
     private String note;
@@ -59,28 +53,5 @@ public class RecipeIngredient
 
         @Column(name = "ing_id")
         private int ingId;
-    }
-
-    public static class QuantityDeserializer extends StdDeserializer<Double>
-    {
-        public QuantityDeserializer() {
-            this(null);
-        }
-
-        public QuantityDeserializer(Class<?> vc) {
-            super(vc);
-        }
-
-        @Override
-        public Double deserialize(JsonParser jsonParser,
-                                  DeserializationContext deserializationContext) throws IOException {
-            String qty = jsonParser.getText().trim().replace(',', '.');
-
-            try {
-                return Double.valueOf(qty);
-            } catch (NumberFormatException ex) {
-                throw new NumberFormatException("RecipeIngredient's 'quantity' field can't be parsed to double");
-            }
-        }
     }
 }

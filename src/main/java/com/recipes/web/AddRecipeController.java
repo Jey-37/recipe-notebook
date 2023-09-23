@@ -4,14 +4,16 @@ import com.recipes.model.Ingredient;
 import com.recipes.model.Recipe;
 import com.recipes.model.RecipeIngredient;
 import com.recipes.model.Tag;
+import com.recipes.model.dto.RecipeForm;
+import com.recipes.model.dto.RecipeIngredientDto;
 import com.recipes.repo.IngredientRepository;
 import com.recipes.repo.RecipeIngredientRepository;
 import com.recipes.repo.RecipeRepository;
 import com.recipes.repo.TagRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -24,34 +26,35 @@ public class AddRecipeController
 {
     private final Logger log = Logger.getLogger(AddRecipeController.class.getName());
 
-    private final IngredientRepository ingredientRepository;
+    private final IngredientRepository ingredientRepo;
 
-    @Autowired
-    private RecipeRepository recipeRepo;
+    private final RecipeRepository recipeRepo;
 
-    @Autowired
-    private TagRepository tagRepo;
+    private final TagRepository tagRepo;
 
-    @Autowired
-    private RecipeIngredientRepository recIngRepo;
+    private final RecipeIngredientRepository recIngRepo;
 
-    public AddRecipeController(IngredientRepository ingredientRepository) {
-        this.ingredientRepository = ingredientRepository;
+    public AddRecipeController(RecipeRepository recipeRepo, IngredientRepository ingredientRepo,
+                               TagRepository tagRepo, RecipeIngredientRepository recIngRepo) {
+        this.recipeRepo = recipeRepo;
+        this.ingredientRepo = ingredientRepo;
+        this.tagRepo = tagRepo;
+        this.recIngRepo = recIngRepo;
     }
 
     /*@GetMapping
     public String addRecipePage(Model model) {
-        model.addAttribute("recipe", new Recipe());
-        //model.addAttribute("ingredients", ingredientRepository.findAll());
-        //log.info("The number of ingredients: "+ingredientRepository.count());
+        model.addAttribute("recipe", new RecipeForm());
+        model.addAttribute("tags", tagRepo.findAll());
+
         return "addRecipe";
     }*/
 
     @GetMapping
     public String addRecipePage(Model model) {
-        Recipe recipe = new Recipe();
+        RecipeForm recipe = new RecipeForm();
         recipe.setName("Test Recipe");
-        recipe.setPortionsNumber(9);
+        recipe.setPortionsNumber(5);
 
         List<Tag> tags = new ArrayList<>((Collection<Tag>) tagRepo.findAll());
         Collections.shuffle(tags);
@@ -61,20 +64,15 @@ public class AddRecipeController
             recipe.addCookingStage("Stage "+i);
         }
 
-        recipeRepo.save(recipe);
-
-        Set<RecipeIngredient> recIngreds = new HashSet<>();
-        List<Ingredient> ingreds = new ArrayList<>((Collection<Ingredient>) ingredientRepository.findAll());
+        List<RecipeIngredientDto> recIngreds = new ArrayList<>();
+        List<Ingredient> ingreds = new ArrayList<>((Collection<Ingredient>) ingredientRepo.findAll());
         Collections.shuffle(ingreds);
         int ingredsNum = new Random().nextInt(3, 8);
         ingreds.subList(0, ingredsNum).forEach(ing ->
-                recIngreds.add(new RecipeIngredient(recipe, ing, ing.getType().getMeasures().iterator().next())));
+                recIngreds.add(new RecipeIngredientDto(ing, ing.getType().getMeasures().iterator().next().getId())));
         recIngreds.forEach(ri -> ri.setQuantity(new Random().nextInt(1, 10)));
 
-        //recIngRepo.saveAll(recIngreds);
-        //log.info(recIngreds.toString());
-
-        recipe.setRecipeIngredients(recIngreds);
+        recipe.setIngredients(recIngreds);
 
         model.addAttribute("recipe", recipe);
         model.addAttribute("tags", tags);
@@ -83,7 +81,8 @@ public class AddRecipeController
     }
 
     @PostMapping
-    public String postRecipe(Recipe recipe) {
+    public String postRecipe(@ModelAttribute RecipeForm recipe) {
+        log.info(recipe.toString());
         return "redirect:/";
     }
 }
