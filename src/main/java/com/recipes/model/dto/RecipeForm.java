@@ -12,15 +12,8 @@ import java.util.Set;
 public class RecipeForm
 {
     private String name;
-    private int portionsNumber;
+    private int portionsNumber = 1;
     private Set<Tag> tags = new HashSet<>();
     private List<String> stages = new ArrayList<>();
     private List<RecipeIngredientDto> ingredients = new ArrayList<>();
-
-    public void addTag(Tag tag) {
-        tags.add(tag);
-    }
-    public void addCookingStage(String stage) {
-        stages.add(stage);
-    }
 }

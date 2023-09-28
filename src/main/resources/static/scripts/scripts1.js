@@ -1,28 +1,39 @@
+"use strict";
+
 const ingredientMap = loadIngredients();
+const shownIngredients = [];
 
 const ingredSearchField = document.getElementById("ingredient-search");
 const dropdownContent = document.getElementsByClassName("dropdown-content")[0]
 const resList = document.getElementsByClassName("dropdown-results-list")[0];
+const ingredientTable = document.querySelector("#ingredients-table tbody");
+const stageTable = document.querySelector("#stage-table tbody");
 
 ingredSearchField.addEventListener("input", showDropdownSearchList);
+
+let isResListWasMouseDown = false;
 ingredSearchField.addEventListener("focusin", () => {
     dropdownContent.style.display = "block";
 });
 ingredSearchField.addEventListener("focusout", () => {
-    dropdownContent.style.display = "none";
+    if (!isResListWasMouseDown)
+        dropdownContent.style.display = "none";
 });
 
-resList.addEventListener("click", addIngredient);
+resList.addEventListener("mousedown", () => {
+    isResListWasMouseDown = true;
+});
+document.addEventListener("mouseup", evt => {
+    if (isResListWasMouseDown) {
+        if (resList.contains(evt.target))
+            addIngredient(evt);
+        isResListWasMouseDown = false;
+        ingredSearchField.focus();
+    }
+});
 
-const rmvIngButtons = document.getElementsByClassName("remove-ingredient-btn");
-for (let i = 0; i < rmvIngButtons.length; i++) {
-    rmvIngButtons.item(i).addEventListener("click", removeIngredientRow);
-}
+document.getElementById("add-stage-btn").addEventListener("click", addStage);
 
-const rmvStageButtons = document.getElementsByClassName("remove-stage-btn");
-for (let i = 0; i < rmvStageButtons.length; i++) {
-    rmvStageButtons.item(i).addEventListener("click", removeStage);
-}
 
 function loadIngredients() {
     let ingMap = new Map();
@@ -62,7 +73,7 @@ function filterIngredients(searchQuery) {
 
     for (let [iName, ing] of ingredientMap) {
         iName = iName.toLowerCase();
-        if (iName.startsWith(searchQuery) || iName.includes(" "+searchQuery)) {
+        if (!shownIngredients.includes(ing.id) && (iName.startsWith(searchQuery) || iName.includes(" "+searchQuery))) {
             res.push(ing);
         }
     }
@@ -72,24 +83,95 @@ function filterIngredients(searchQuery) {
 
 function addIngredient(evt) {
     const ingredient = ingredientMap.get(evt.target.innerText);
-    //createIngredientTableRow(ingredient);
+
+    createIngredientTableRow(ingredient);
+
+    shownIngredients.push(ingredient.id);
+    resList.innerHTML = "";
+    dropdownContent.style.display = "none";
+    ingredSearchField.value = "";
 }
 
 function createIngredientTableRow(ingredient) {
-    const ingredientTableRow = document.createElement("tr");
+    const ingNumber = ingredientTable.childElementCount;
 
-    const ingNameCell = document.createElement("td");
-    ingNameCell.innerText = ingredient.name;
+    let ingMeasureSelectOptions = [];
+    for (let m of ingredient.type.measures) {
+        ingMeasureSelectOptions.push(`<option value="${m.id}" selected="selected">${m.title}</option>`);
+    }
 
-    ingredientTableRow.append(ingNameCell);
+    const ingredientRow = `<tr>
+        <td>
+            <input type="hidden" id="ingredients${ingNumber}.ingredient" 
+                   name="ingredients[${ingNumber}].ingredient" value="${ingredient.id}">
+        </td>
+        <td class="ing-name-cell">${ingredient.name}</td>
+        <td>
+            <input id="ingredients${ingNumber}.quantity" name="ingredients[${ingNumber}].quantity" value="1.0"
+                   class="number-input" type="text" size="6" maxlength="6" placeholder="Кількість" 
+                   pattern=" *(?:[1-9]\\d*|(?:0|[1-9]\\d*)[\\.,]\\d) *">
+        </td>
+        <td>
+            <select class="ing-measure-select" id="ingredients${ingNumber}.measure"
+                    name="ingredients[${ingNumber}].measure">
+                ${ingMeasureSelectOptions.join("\n")}
+            </select>
+        </td>
+        <td>
+            <input type="text" placeholder="Примітка" maxlength="20" id="ingredients${ingNumber}.note" 
+                   name="ingredients[${ingNumber}].note">
+        </td>
+        <td>
+            <button type="button" class="remove-ingredient-btn" tabindex="-1" 
+                    onclick="removeIngredientRow(this)">❌</button>
+        </td>
+    </tr>`;
+
+    ingredientTable.innerHTML += ingredientRow;
 }
 
-function removeIngredientRow(evt) {
-    evt.stopPropagation();
-    evt.target.parentNode.parentElement.remove();
+function removeIngredientRow(btn) {
+    let remIngId = btn.parentNode.parentElement.querySelector("input[type=\"hidden\"]").value;
+    shownIngredients.splice(shownIngredients.indexOf(remIngId), 1);
+
+    btn.parentNode.parentElement.remove();
+
+    const ingTableRows = ingredientTable.children;
+
+    for (let i = 0; i < ingTableRows.length; i++) {
+        const rowInputs = ingTableRows[i].getElementsByTagName("input");
+        for (let input of rowInputs) {
+            input.id = input.id.replace(/ingredients\d+/, "ingredients"+i);
+            input.name = input.name.replace(/ingredients\[\d+]/, "ingredients["+i+"]");
+        }
+    }
 }
 
-function removeStage(evt) {
-    evt.stopPropagation();
-    evt.target.parentNode.parentElement.remove();
+function addStage() {
+    const stageNumber = stageTable.childElementCount;
+
+    const stageRow = `<tr>
+        <td>
+            <textarea class="stage-input-area" id="stages${stageNumber}" name="stages[${stageNumber}]"
+                      placeholder="Введіть вказівки з приготування"></textarea>
+        </td>
+        <td>
+            <button type="button" class="remove-stage-btn" tabindex="-1"
+                    onclick="removeStage(this)">❌</button>
+        </td>
+    </tr>`;
+
+    stageTable.innerHTML += stageRow;
+}
+
+function removeStage(btn) {
+    btn.parentNode.parentElement.remove();
+
+    const stageTableRows = stageTable.children;
+
+    for (let i = 0; i < stageTableRows.length; i++) {
+        const textarea = stageTableRows[i].getElementsByTagName("textarea")[0];
+        textarea.id = textarea.id.replace(/stages\d+/, "stages"+i);
+        textarea.name = textarea.name.replace(/stages\[\d+]/, "stages["+i+"]");
+    }
 }

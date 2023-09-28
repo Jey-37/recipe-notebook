@@ -1,20 +1,14 @@
 package com.recipes.model.dto;
 
 import com.recipes.model.Ingredient;
+import com.recipes.model.Measure;
 import lombok.Data;
 
 @Data
 public class RecipeIngredientDto
 {
     private Ingredient ingredient;
-    private int measureId;
+    private Measure measure;
     private double quantity;
     private String note;
-
-    protected RecipeIngredientDto() {}
-
-    public RecipeIngredientDto(Ingredient ingredient, int measureId) {
-        this.ingredient = ingredient;
-        this.measureId = measureId;
-    }
 }

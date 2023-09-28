@@ -30,22 +30,24 @@ public class RecipeIngredient
 
     protected RecipeIngredient() {}
 
-    public RecipeIngredient(Recipe recipe, Ingredient ingredient,
-                            Measure measure) {
+    public RecipeIngredient(Recipe recipe, Ingredient ingredient, Measure measure,
+                            double quantity, String note) {
         if (recipe.getId() == 0) {
             throw new IllegalStateException("Recipe is transient: " + recipe);
         }
         this.id = new Id(recipe.getId(), ingredient.getId());
         this.ingredient = ingredient;
         this.measure = measure;
+        this.quantity = quantity;
+        this.note = note;
 
         recipe.addRecipeIngredient(this);
     }
 
     @Embeddable
+    @Data
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @EqualsAndHashCode
     public static class Id implements Serializable
     {
         @Column(name = "rec_id")

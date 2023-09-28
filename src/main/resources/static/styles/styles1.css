@@ -89,6 +89,7 @@ main {
 
 .dropdown-results-list li {
     padding: 3px;
+    user-select: none;
 }
 
 .dropdown-results-list li:hover {
