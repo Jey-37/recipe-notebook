@@ -28,6 +28,9 @@ public class RecipeIngredient
 
     private String note;
 
+    @Column(nullable = false)
+    private int num;
+
     protected RecipeIngredient() {}
 
     public RecipeIngredient(Recipe recipe, Ingredient ingredient, Measure measure,
@@ -40,6 +43,7 @@ public class RecipeIngredient
         this.measure = measure;
         this.quantity = quantity;
         this.note = note;
+        this.num = recipe.getRecipeIngredients().size();
 
         recipe.addRecipeIngredient(this);
     }

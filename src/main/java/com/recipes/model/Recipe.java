@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -55,22 +56,15 @@ public class Recipe
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "rec_id")
-    private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
+    @org.hibernate.annotations.OrderBy(clause = "num")
+    private Set<RecipeIngredient> recipeIngredients = new LinkedHashSet<>();
 
     public void addTag(Tag tag) {
         tags.add(tag);
     }
 
-    public void removeTag(Tag tag) {
-        tags.remove(tag);
-    }
-
     public void addCookingStage(String stage) {
         stages.add(stage);
-    }
-
-    public void removeCookingStage(int stageNum) {
-        stages.remove(stageNum);
     }
 
     public void addRecipeIngredient(RecipeIngredient recipeIngredient) {

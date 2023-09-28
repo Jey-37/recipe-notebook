@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS ingredients (
 CREATE TABLE IF NOT EXISTS recipes_ingredients (
     rec_id BIGINT NOT NULL,
     ing_id INT NOT NULL,
+    num TINYINT NOT NULL,
     meas_id INT NOT NULL,
     quantity DECIMAL(5,1),
     note VARCHAR(60),
@@ -64,7 +65,7 @@ CREATE TABLE IF NOT EXISTS recipes_ingredients (
 );
 
 CREATE TABLE IF NOT EXISTS users (
-    id bigint AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
 
