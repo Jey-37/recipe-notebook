@@ -53,7 +53,7 @@ public class Recipe
     @OrderColumn(name = "stage", nullable = false)
     private List<String> stages = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "rec_id")
     private Set<RecipeIngredient> recipeIngredients = new HashSet<>();
 
