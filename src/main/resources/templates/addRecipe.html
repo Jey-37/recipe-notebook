@@ -8,42 +8,43 @@
 <body>
     <main>
         <h1>Додайте рецепт</h1>
-        <form method="post" action="#" th:action="@{/recipes/add}" th:object="${recipe}">
+        <form method="post" action="#" th:action="@{/recipes/add}" th:object="${recipe}" name="recipe-form">
             <table id="recipe-head-table">
                 <tr>
                     <td><label th:for="${#ids.next('name')}">Назва:</label></td>
-                    <td><input type="text" th:field="*{name}"
-                               placeholder="Введіть назву страви"/></td>
+                    <td><input type="text" th:field="*{name}" autocomplete="off" maxlength="60"
+                               placeholder="Введіть назву страви" required/></td>
                 </tr>
                 <tr>
                     <td><label th:for="${#ids.next('portionsNumber')}">Кількість порцій:</label></td>
                     <td><input type="number" th:field="*{portionsNumber}" value="1" min="1" max="25"
-                               placeholder="Введіть число порцій"/></td>
+                               placeholder="Введіть число порцій" required/></td>
                 </tr>
             </table>
-            <section id="ingredients-block">
+            <section id="ingredients-section">
                 <h3>Інгредієнти</h3>
                 <div class="dropdown">
-                    <input id="ingredient-search" type="search" name="model"
-                           autocomplete="off"
-                           placeholder="Почніть вводити інгредієнт..."/>
+                    <input id="ingredient-search" type="search" name="search"
+                           autocomplete="off" placeholder="Почніть вводити інгредієнт..."/>
                     <div class="dropdown-content">
                         <ul class="dropdown-results-list"></ul>
                     </div>
                 </div>
+                <p class="warn-msg">Додайте принаймні один інгредієнт</p>
 
                 <table id="ingredients-table">
                     <tbody></tbody>
                 </table>
             </section>
-            <section>
+            <section id="stages-section">
                 <h3>Етапи приготування</h3>
+                <p class="warn-msg">Додайте принаймні один етап приготування</p>
                 <table id="stage-table">
                     <tbody>
                         <tr>
                             <td>
                                 <textarea class="stage-input-area" id="stages0" name="stages[0]"
-                                          placeholder="Введіть вказівки з приготування"></textarea>
+                                          placeholder="Введіть вказівки до приготування" required></textarea>
                             </td>
                             <td>
                                 <button type="button" class="remove-stage-btn" tabindex="-1"
@@ -54,8 +55,9 @@
                 </table>
                 <button type="button" id="add-stage-btn">Додати етап</button>
             </section>
-            <section>
+            <section id="tags-section">
                 <h3>Категорії страви</h3>
+                <p class="warn-msg">Виберіть принаймні одну категорію</p>
                 <div id="tags-block">
                     <div class="tag-wrapper" th:each="tag : ${tags}">
                         <input type="checkbox" th:field="*{tags}" th:value="${tag.id}">
@@ -67,6 +69,7 @@
             <input type="submit" value="Надіслати рецепт">
         </form>
     </main>
-    <script src="/static/scripts/scripts1.js" th:src="@{/scripts/scripts1.js}"></script>
+    <script src="/scripts/add-recipe-form-script.js" th:src="@{/scripts/add-recipe-form-script.js}"></script>
+    <script src="/scripts/add-recipe-form-validation.js" th:src="@{/scripts/add-recipe-form-validation.js}"></script>
 </body>
 </html>

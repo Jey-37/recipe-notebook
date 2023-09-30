@@ -100,6 +100,7 @@ main {
 #ingredients-table {
     margin: 15px;
     empty-cells: hide;
+    display: none;
 }
 
 #ingredients-table td {
@@ -125,7 +126,7 @@ main {
     width: 30em;
 }
 
-.number-input {
+.qty-input {
     text-align: right;
 }
 
@@ -138,4 +139,21 @@ main {
 
 .tag-wrapper {
     width: 12em;
+}
+
+@keyframes blinking {
+    from {box-shadow: 0 0 5px #dc0e37;}
+    50% {box-shadow: 0 0 5px rgba(220, 14, 55, 0.3);}
+    to {box-shadow: 0 0 5px #dc0e37;}
+}
+
+.invalid {
+    animation: blinking 3s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: forwards;
+}
+
+.warn-msg {
+    color: #dc0e37;
+    display: none;
 }

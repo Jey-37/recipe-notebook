@@ -34,6 +34,12 @@ document.addEventListener("mouseup", evt => {
 
 document.getElementById("add-stage-btn").addEventListener("click", addStage);
 
+document.forms["recipe-form"].addEventListener("keypress", e => {
+    if (e.keyCode === 13) {
+        e.preventDefault();
+    }
+});
+
 
 function loadIngredients() {
     let ingMap = new Map();
@@ -90,6 +96,9 @@ function addIngredient(evt) {
     resList.innerHTML = "";
     dropdownContent.style.display = "none";
     ingredSearchField.value = "";
+
+    document.getElementById("ingredients-table").style.display = "block";
+    document.querySelector("#ingredients-section .warn-msg").style.display = "none";
 }
 
 function createIngredientTableRow(ingredient) {
@@ -100,7 +109,8 @@ function createIngredientTableRow(ingredient) {
         ingMeasureSelectOptions.push(`<option value="${m.id}" selected="selected">${m.title}</option>`);
     }
 
-    const ingredientRow = `<tr>
+    const ingredientRow = document.createElement("tr");
+    ingredientRow.innerHTML = `
         <td>
             <input type="hidden" id="ingredients${ingNumber}.ingredient" 
                    name="ingredients[${ingNumber}].ingredient" value="${ingredient.id}">
@@ -108,7 +118,7 @@ function createIngredientTableRow(ingredient) {
         <td class="ing-name-cell">${ingredient.name}</td>
         <td>
             <input id="ingredients${ingNumber}.quantity" name="ingredients[${ingNumber}].quantity" value="1.0"
-                   class="number-input" type="text" size="6" maxlength="6" placeholder="Кількість" 
+                   class="qty-input" type="text" size="6" maxlength="6" placeholder="Кількість" 
                    pattern=" *(?:[1-9]\\d*|(?:0|[1-9]\\d*)[\\.,]\\d) *">
         </td>
         <td>
@@ -124,10 +134,9 @@ function createIngredientTableRow(ingredient) {
         <td>
             <button type="button" class="remove-ingredient-btn" tabindex="-1" 
                     onclick="removeIngredientRow(this)">❌</button>
-        </td>
-    </tr>`;
+        </td>`;
 
-    ingredientTable.innerHTML += ingredientRow;
+    ingredientTable.appendChild(ingredientRow);
 }
 
 function removeIngredientRow(btn) {
@@ -145,23 +154,27 @@ function removeIngredientRow(btn) {
             input.name = input.name.replace(/ingredients\[\d+]/, "ingredients["+i+"]");
         }
     }
+
+    if (ingTableRows.length === 0) {
+        document.getElementById("ingredients-table").style.display = "none";
+    }
 }
 
 function addStage() {
     const stageNumber = stageTable.childElementCount;
 
-    const stageRow = `<tr>
+    const stageRow = document.createElement("tr");
+    stageRow.innerHTML = `
         <td>
             <textarea class="stage-input-area" id="stages${stageNumber}" name="stages[${stageNumber}]"
-                      placeholder="Введіть вказівки з приготування"></textarea>
+                      placeholder="Введіть вказівки до приготування"></textarea>
         </td>
         <td>
             <button type="button" class="remove-stage-btn" tabindex="-1"
                     onclick="removeStage(this)">❌</button>
-        </td>
-    </tr>`;
+        </td>`;
 
-    stageTable.innerHTML += stageRow;
+    stageTable.appendChild(stageRow);
 }
 
 function removeStage(btn) {
