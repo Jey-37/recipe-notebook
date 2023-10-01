@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed&display=swap');
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/materialsymbolsoutlined/v138/kJF1BvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzByHX9rA6RzaxHMPdY43zj-jCxv3fzvRNU22ZXGJpEpjC_1v-p_4MrImHCIJIZrDCvHOej.woff2) format('woff2');
+}
 
 * {
     font-size: 100%;
@@ -90,11 +96,11 @@ main {
 .dropdown-results-list li {
     padding: 3px;
     user-select: none;
+    cursor: pointer;
 }
 
 .dropdown-results-list li:hover {
     background-color: #dad7d7;
-    cursor: pointer;
 }
 
 #ingredients-list {
@@ -105,7 +111,7 @@ main {
 
 #ingredients-list li {
     list-style: none;
-    display: flex;
+    display: inline-flex;
     cursor: move;
     align-items: center;
     height: 2.5em;
@@ -163,4 +169,19 @@ main {
 .warn-msg {
     color: #dc0e37;
     display: none;
+}
+
+.dragging {
+    opacity: 0;
+}
+
+.drag-indicator {
+    font-family: 'Material Symbols Outlined';
+    display: block;
+    font-style: normal;
+    color: #a8a4a4;
+}
+
+.drag-indicator:before {
+    content: '\e945';
 }

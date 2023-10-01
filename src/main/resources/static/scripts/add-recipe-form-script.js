@@ -21,6 +21,9 @@ resList.addEventListener("mousedown", () => {
     ingredSearchField.removeEventListener("focusout", hideDropdown);
 });
 
+ingredientList.addEventListener("dragover", changeListOrder);
+ingredientList.addEventListener("dragenter", e => e.preventDefault());
+
 document.getElementById("add-stage-btn").addEventListener("click", addStage);
 
 document.forms["recipe-form"].addEventListener("keypress", e => {
@@ -79,7 +82,7 @@ function filterIngredients(searchQuery) {
 function addIngredient(evt) {
     const ingredient = ingredientMap.get(evt.target.innerText);
 
-    createIngredientTableRow(ingredient);
+    ingredientList.appendChild(createIngredientTableRow(ingredient));
 
     shownIngredients.push(ingredient.id);
     resList.innerHTML = "";
@@ -99,7 +102,10 @@ function createIngredientTableRow(ingredient) {
     }
 
     const ingredientRow = document.createElement("li");
+    ingredientRow.draggable = true;
+
     ingredientRow.innerHTML = `
+        <div><i class="drag-indicator"></i></div>
         <div class="ing-id-cell">
             <input type="hidden" id="ingredients${ingNumber}.ingredient" 
                    name="ingredients[${ingNumber}].ingredient" value="${ingredient.id}">
@@ -125,15 +131,32 @@ function createIngredientTableRow(ingredient) {
                     onclick="removeIngredientRow(this)">❌</button>
         </div>`;
 
-    ingredientList.appendChild(ingredientRow);
+    ingredientRow.querySelectorAll("input, button").forEach(el => {
+        el.addEventListener("mousedown", () => {ingredientRow.draggable = false;});
+        el.addEventListener("mouseup", () => {ingredientRow.draggable = true;});
+        el.addEventListener("mouseleave", () => {ingredientRow.draggable = true;});
+    });
+
+    ingredientRow.addEventListener("dragstart", () => setTimeout(() => ingredientRow.classList.add("dragging"), 0));
+    ingredientRow.addEventListener("dragend", () => ingredientRow.classList.remove("dragging"));
+
+    return ingredientRow;
 }
 
 function removeIngredientRow(btn) {
-    let remIngId = btn.parentNode.parentElement.querySelector(".ing-id-cell input").value;
+    let remIngId = parseInt(btn.parentNode.parentElement.querySelector(".ing-id-cell input").value);
     shownIngredients.splice(shownIngredients.indexOf(remIngId), 1);
 
     btn.parentNode.parentElement.remove();
 
+    if (ingredientList.childElementCount > 0) {
+        correctIngRowIndexes();
+    } else {
+        ingredientList.style.display = "none";
+    }
+}
+
+function correctIngRowIndexes() {
     const ingTableRows = ingredientList.children;
 
     for (let i = 0; i < ingTableRows.length; i++) {
@@ -142,10 +165,6 @@ function removeIngredientRow(btn) {
             input.id = input.id.replace(/ingredients\d+/, "ingredients"+i);
             input.name = input.name.replace(/ingredients\[\d+]/, "ingredients["+i+"]");
         }
-    }
-
-    if (ingTableRows.length === 0) {
-        ingredientList.style.display = "none";
     }
 }
 
@@ -184,4 +203,16 @@ function docOnMouseUpFunc(evt) {
     ingredSearchField.focus();
     ingredSearchField.addEventListener("focusout", hideDropdown);
     document.removeEventListener("mouseup", docOnMouseUpFunc);
+}
+
+function changeListOrder(evt) {
+    evt.preventDefault();
+
+    const draggingRow = document.querySelector(".dragging");
+    let siblings = [...ingredientList.querySelectorAll("li:not(.dragging)")];
+
+    let nextSibling = siblings.find(sibling => evt.pageY <= sibling.offsetTop + sibling.offsetHeight / 2);
+    ingredientList.insertBefore(draggingRow, nextSibling);
+
+    correctIngRowIndexes();
 }
