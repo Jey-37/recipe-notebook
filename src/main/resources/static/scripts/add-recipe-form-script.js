@@ -9,27 +9,16 @@ const resList = document.getElementsByClassName("dropdown-results-list")[0];
 const ingredientTable = document.querySelector("#ingredients-table tbody");
 const stageTable = document.querySelector("#stage-table tbody");
 
-ingredSearchField.addEventListener("input", showDropdownSearchList);
+const showDropdown = () => {dropdownContent.style.display = "block"};
+const hideDropdown = () => {dropdownContent.style.display = "none"};
 
-let isResListWasMouseDown = false;
-ingredSearchField.addEventListener("focusin", () => {
-    dropdownContent.style.display = "block";
-});
-ingredSearchField.addEventListener("focusout", () => {
-    if (!isResListWasMouseDown)
-        dropdownContent.style.display = "none";
-});
+ingredSearchField.addEventListener("input", showIngredientList);
+ingredSearchField.addEventListener("focusin", showDropdown);
+ingredSearchField.addEventListener("focusout", hideDropdown);
 
 resList.addEventListener("mousedown", () => {
-    isResListWasMouseDown = true;
-});
-document.addEventListener("mouseup", evt => {
-    if (isResListWasMouseDown) {
-        if (resList.contains(evt.target))
-            addIngredient(evt);
-        isResListWasMouseDown = false;
-        ingredSearchField.focus();
-    }
+    document.addEventListener("mouseup", docOnMouseUpFunc);
+    ingredSearchField.removeEventListener("focusout", hideDropdown);
 });
 
 document.getElementById("add-stage-btn").addEventListener("click", addStage);
@@ -49,18 +38,18 @@ function loadIngredients() {
     return ingMap;
 }
 
-function showDropdownSearchList() {
+function showIngredientList() {
     resList.innerHTML = "";
 
     if (ingredSearchField.value.length === 0) {
-        dropdownContent.style.display = "none";
+        hideDropdown();
         return;
     }
 
     let filteredIngredients = filterIngredients(ingredSearchField.value);
 
     if (filteredIngredients.length === 0) {
-        dropdownContent.style.display = "none";
+        hideDropdown();
         return;
     }
 
@@ -70,7 +59,7 @@ function showDropdownSearchList() {
         resList.appendChild(li);
     }
 
-    dropdownContent.style.display = "block";
+    showDropdown();
 }
 
 function filterIngredients(searchQuery) {
@@ -94,7 +83,7 @@ function addIngredient(evt) {
 
     shownIngredients.push(ingredient.id);
     resList.innerHTML = "";
-    dropdownContent.style.display = "none";
+    hideDropdown();
     ingredSearchField.value = "";
 
     document.getElementById("ingredients-table").style.display = "block";
@@ -187,4 +176,12 @@ function removeStage(btn) {
         textarea.id = textarea.id.replace(/stages\d+/, "stages"+i);
         textarea.name = textarea.name.replace(/stages\[\d+]/, "stages["+i+"]");
     }
+}
+
+function docOnMouseUpFunc(evt) {
+    if (resList.contains(evt.target))
+        addIngredient(evt);
+    ingredSearchField.focus();
+    ingredSearchField.addEventListener("focusout", hideDropdown);
+    document.removeEventListener("mouseup", docOnMouseUpFunc);
 }
