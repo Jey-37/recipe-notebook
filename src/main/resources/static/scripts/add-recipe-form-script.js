@@ -6,7 +6,7 @@ const shownIngredients = [];
 const ingredSearchField = document.getElementById("ingredient-search");
 const dropdownContent = document.getElementsByClassName("dropdown-content")[0]
 const resList = document.getElementsByClassName("dropdown-results-list")[0];
-const ingredientTable = document.querySelector("#ingredients-table tbody");
+const ingredientList = document.querySelector("#ingredients-list");
 const stageTable = document.querySelector("#stage-table tbody");
 
 const showDropdown = () => {dropdownContent.style.display = "block"};
@@ -86,55 +86,55 @@ function addIngredient(evt) {
     hideDropdown();
     ingredSearchField.value = "";
 
-    document.getElementById("ingredients-table").style.display = "block";
+    ingredientList.style.display = "block";
     document.querySelector("#ingredients-section .warn-msg").style.display = "none";
 }
 
 function createIngredientTableRow(ingredient) {
-    const ingNumber = ingredientTable.childElementCount;
+    const ingNumber = ingredientList.childElementCount;
 
     let ingMeasureSelectOptions = [];
     for (let m of ingredient.type.measures) {
         ingMeasureSelectOptions.push(`<option value="${m.id}" selected="selected">${m.title}</option>`);
     }
 
-    const ingredientRow = document.createElement("tr");
+    const ingredientRow = document.createElement("li");
     ingredientRow.innerHTML = `
-        <td>
+        <div class="ing-id-cell">
             <input type="hidden" id="ingredients${ingNumber}.ingredient" 
                    name="ingredients[${ingNumber}].ingredient" value="${ingredient.id}">
-        </td>
-        <td class="ing-name-cell">${ingredient.name}</td>
-        <td>
+        </div>
+        <div class="ing-name-cell">${ingredient.name}</div>
+        <div>
             <input id="ingredients${ingNumber}.quantity" name="ingredients[${ingNumber}].quantity" value="1.0"
                    class="qty-input" type="text" size="6" maxlength="6" placeholder="Кількість" 
-                   pattern=" *(?:[1-9]\\d*|(?:0|[1-9]\\d*)[\\.,]\\d) *">
-        </td>
-        <td>
+                   pattern=" *(?:[1-9]\\d*|(?:0|[1-9]\\d*)[\\.,]\\d) *" autocomplete="off" required>
+        </div>
+        <div>
             <select class="ing-measure-select" id="ingredients${ingNumber}.measure"
                     name="ingredients[${ingNumber}].measure">
                 ${ingMeasureSelectOptions.join("\n")}
             </select>
-        </td>
-        <td>
+        </div>
+        <div>
             <input type="text" placeholder="Примітка" maxlength="20" id="ingredients${ingNumber}.note" 
-                   name="ingredients[${ingNumber}].note">
-        </td>
-        <td>
+                   name="ingredients[${ingNumber}].note" autocomplete="off">
+        </div>
+        <div>
             <button type="button" class="remove-ingredient-btn" tabindex="-1" 
                     onclick="removeIngredientRow(this)">❌</button>
-        </td>`;
+        </div>`;
 
-    ingredientTable.appendChild(ingredientRow);
+    ingredientList.appendChild(ingredientRow);
 }
 
 function removeIngredientRow(btn) {
-    let remIngId = btn.parentNode.parentElement.querySelector("input[type=\"hidden\"]").value;
+    let remIngId = btn.parentNode.parentElement.querySelector(".ing-id-cell input").value;
     shownIngredients.splice(shownIngredients.indexOf(remIngId), 1);
 
     btn.parentNode.parentElement.remove();
 
-    const ingTableRows = ingredientTable.children;
+    const ingTableRows = ingredientList.children;
 
     for (let i = 0; i < ingTableRows.length; i++) {
         const rowInputs = ingTableRows[i].getElementsByTagName("input");
@@ -145,7 +145,7 @@ function removeIngredientRow(btn) {
     }
 
     if (ingTableRows.length === 0) {
-        document.getElementById("ingredients-table").style.display = "none";
+        ingredientList.style.display = "none";
     }
 }
 

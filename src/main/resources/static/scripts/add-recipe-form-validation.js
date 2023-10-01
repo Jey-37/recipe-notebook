@@ -8,7 +8,7 @@ const pnInput = document.getElementById("portionsNumber");
 nameInput.addEventListener("input", () => nameInput.classList.remove("invalid"));
 pnInput.addEventListener("input", () => pnInput.classList.remove("invalid"));
 
-ingredientTable.addEventListener("input", evt => {
+ingredientList.addEventListener("input", evt => {
     if (evt.target.classList.contains("qty-input")) {
         evt.target.classList.remove("invalid");
     }
@@ -66,7 +66,7 @@ function checkPortionsNumberField() {
 }
 
 function checkNumberOfIngredients() {
-    if (ingredientTable.children.length === 0) {
+    if (ingredientList.childElementCount === 0) {
         formIsValid = false;
         document.querySelector("#ingredients-section .warn-msg").style.display = "block";
         return false;
@@ -75,7 +75,7 @@ function checkNumberOfIngredients() {
 }
 
 function checkIngredQuantityFields() {
-    const ingredQuantityFields = ingredientTable.getElementsByClassName("qty-input");
+    const ingredQuantityFields = ingredientList.getElementsByClassName("qty-input");
     let ingQtyFieldsAreValid = true;
     for (let iqf of ingredQuantityFields) {
         if (!iqf.validity.valid) {
@@ -88,7 +88,7 @@ function checkIngredQuantityFields() {
 }
 
 function checkNumberOfStages() {
-    if (stageTable.children.length === 0) {
+    if (stageTable.childElementCount === 0) {
         formIsValid = false;
         document.querySelector("#stages-section .warn-msg").style.display = "block";
         return false;

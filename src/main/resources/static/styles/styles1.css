@@ -97,37 +97,44 @@ main {
     cursor: pointer;
 }
 
-#ingredients-table {
-    margin: 15px;
-    empty-cells: hide;
+#ingredients-list {
+    margin: 20px;
+    padding: 0;
     display: none;
 }
 
-#ingredients-table td {
+#ingredients-list li {
+    list-style: none;
+    display: flex;
+    cursor: move;
+    align-items: center;
+    height: 2.5em;
+}
+
+#ingredients-list li div {
     padding-right: 10px;
-    height: 2em;
 }
 
-#ingredients-table td:first-child {
+.ing-id-cell {
     display: none;
-}
-
-#ingredients-table select {
-    width: 5.5em;
 }
 
 .ing-name-cell {
     width: 12em;
 }
 
+.qty-input {
+    text-align: right;
+}
+
+#ingredients-list select {
+    width: 5.5em;
+}
+
 .stage-input-area {
     resize: none;
     height: 6em;
     width: 30em;
-}
-
-.qty-input {
-    text-align: right;
 }
 
 #tags-block {
