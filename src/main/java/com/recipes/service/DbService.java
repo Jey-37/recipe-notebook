@@ -28,17 +28,17 @@ public class DbService
     public Recipe saveRecipe(Recipe recipe) {
         recipeRepo.save(recipe);
 
-        recipe.getRecipeIngredients().forEach(
-                ri -> ri.setId(new RecipeIngredient.Id(recipe.getId(), ri.getIngredient().getId())));
-        recIngRepo.saveAll(recipe.getRecipeIngredients());
+        recipe.getIngredients().forEach(
+                ing -> ing.setId(new RecipeIngredient.Id(recipe.getId(), ing.getIngredient().getId())));
+        recIngRepo.saveAll(recipe.getIngredients());
 
         return recipe;
     }
 
     @Transactional
     public void updateRecipe(Recipe newRecipe) {
-        newRecipe.getRecipeIngredients().forEach(
-                ri -> ri.setId(new RecipeIngredient.Id(newRecipe.getId(), ri.getIngredient().getId())));
+        newRecipe.getIngredients().forEach(
+                ing -> ing.setId(new RecipeIngredient.Id(newRecipe.getId(), ing.getIngredient().getId())));
 
         Recipe oldRecipe = recipeRepo.findById(newRecipe.getId()).orElseThrow(NoSuchElementException::new);
         oldRecipe.setName(newRecipe.getName());
@@ -46,7 +46,7 @@ public class DbService
         oldRecipe.setStages(newRecipe.getStages());
         oldRecipe.setTags(newRecipe.getTags());
 
-        recIngRepo.deleteAll(oldRecipe.getRecipeIngredients());
-        recIngRepo.saveAll(newRecipe.getRecipeIngredients());
+        recIngRepo.deleteAll(oldRecipe.getIngredients());
+        recIngRepo.saveAll(newRecipe.getIngredients());
     }
 }

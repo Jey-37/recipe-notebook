@@ -62,11 +62,11 @@ public class Recipe
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "rec_id")
     @org.hibernate.annotations.OrderBy(clause = "num")
-    private Set<RecipeIngredient> recipeIngredients = new LinkedHashSet<>();
+    private Set<RecipeIngredient> ingredients = new LinkedHashSet<>();
 
-    public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
-        recipeIngredient.setNum(recipeIngredients.size());
-        recipeIngredients.add(recipeIngredient);
+    public void addIngredient(RecipeIngredient recipeIngredient) {
+        recipeIngredient.setNum(ingredients.size());
+        ingredients.add(recipeIngredient);
     }
 
     public RecipeForm toRecipeForm() {
@@ -76,7 +76,7 @@ public class Recipe
         form.setPortionsNumber(portionsNumber);
         form.setTags(tags);
         form.setStages(stages);
-        form.setIngredients(recipeIngredients.stream().map(RecipeIngredient::toDto).collect(Collectors.toList()));
+        form.setIngredients(ingredients.stream().toList());
 
         return form;
     }

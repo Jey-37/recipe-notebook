@@ -18,7 +18,7 @@ public class RecipeForm
     private int portionsNumber = 1;
     private Set<Tag> tags = new HashSet<>();
     private List<String> stages = new ArrayList<>();
-    private List<RecipeIngredientDto> ingredients = new ArrayList<>();
+    private List<RecipeIngredient> ingredients = new ArrayList<>();
 
     public Recipe toRecipe() {
         Recipe recipe = new Recipe();
@@ -27,9 +27,7 @@ public class RecipeForm
         recipe.setPortionsNumber(portionsNumber);
         recipe.setTags(tags);
         recipe.setStages(stages);
-
-        ingredients.forEach(ing -> recipe.addRecipeIngredient(
-                new RecipeIngredient(ing.getIngredient(), ing.getMeasure(), ing.getQuantity(), ing.getNote())));
+        ingredients.forEach(recipe::addIngredient);
 
         return recipe;
     }

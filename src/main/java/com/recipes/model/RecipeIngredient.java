@@ -1,6 +1,5 @@
 package com.recipes.model;
 
-import com.recipes.model.dto.RecipeIngredientDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,10 +39,6 @@ public class RecipeIngredient
         this.measure = measure;
         this.quantity = quantity;
         this.note = note;
-    }
-
-    public RecipeIngredientDto toDto() {
-        return new RecipeIngredientDto(ingredient, measure, quantity, note);
     }
 
     @Embeddable

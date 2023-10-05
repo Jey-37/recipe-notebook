@@ -44,7 +44,7 @@ public class DbServiceTest
         List<Ingredient> ingreds = new ArrayList<>((Collection<Ingredient>) ingredientRepo.findAll());
         Collections.shuffle(ingreds);
         for (int i = 0; i < 5; i++) {
-            recipe.addRecipeIngredient(new RecipeIngredient(
+            recipe.addIngredient(new RecipeIngredient(
                     ingreds.get(i), ingreds.get(i).getType().getMeasures().iterator().next(), 1, null));
         }
 
@@ -55,7 +55,7 @@ public class DbServiceTest
     public void recipeSaving() {
         Recipe recipe = createRecipe();
 
-        int ingNum = recipe.getRecipeIngredients().size();
+        int ingNum = recipe.getIngredients().size();
 
         dbService.saveRecipe(recipe);
 
@@ -63,9 +63,9 @@ public class DbServiceTest
         Assertions.assertNotNull(recipe.getCreateDate());
 
         Recipe savedRecipe = recipeRepo.findById(recipe.getId()).get();
-        Assertions.assertEquals(ingNum, savedRecipe.getRecipeIngredients().size());
+        Assertions.assertEquals(ingNum, savedRecipe.getIngredients().size());
         int i = 0;
-        for (var ri : savedRecipe.getRecipeIngredients()) {
+        for (var ri : savedRecipe.getIngredients()) {
             Assertions.assertEquals(i++, ri.getNum());
         }
     }
@@ -85,9 +85,9 @@ public class DbServiceTest
         Assertions.assertEquals(newRecipe.getPortionsNumber(), loadedRecipe.getPortionsNumber());
         Assertions.assertEquals(newRecipe.getTags(), loadedRecipe.getTags());
         Assertions.assertEquals(newRecipe.getStages(), loadedRecipe.getStages());
-        Assertions.assertEquals(newRecipe.getRecipeIngredients().size(), loadedRecipe.getRecipeIngredients().size());
-        for (Iterator<RecipeIngredient> i = newRecipe.getRecipeIngredients().iterator(),
-             j = loadedRecipe.getRecipeIngredients().iterator(); i.hasNext() && j.hasNext();) {
+        Assertions.assertEquals(newRecipe.getIngredients().size(), loadedRecipe.getIngredients().size());
+        for (Iterator<RecipeIngredient> i = newRecipe.getIngredients().iterator(),
+             j = loadedRecipe.getIngredients().iterator(); i.hasNext() && j.hasNext();) {
             Assertions.assertEquals(i.next(), j.next());
         }
     }
