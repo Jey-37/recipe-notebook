@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed&display=swap');
+
+* {
+    font-size: 100%;
+    font-family: 'Fira Sans Condensed', sans-serif;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+h1 {
+    font-size: 2.2em;
+}
+
+h2 {
+    font-size: 1.5em;
+}
+
+h3 {
+    font-size: 1.2em;
+}
+
+body {
+    margin: 0;
+}
+
+main {
+    min-width: 640px;
+    max-width: 864px;
+    background-color: white;
+    box-shadow: 0 0 5px #727272;
+    margin: auto;
+    padding: 20px;
+}
+
+#recipe-list li p {
+    font-size: 1.2em;
+}

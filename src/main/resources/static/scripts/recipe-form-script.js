@@ -121,7 +121,6 @@ function addIngredient(evt) {
     hideDropdown();
     ingredSearchField.value = "";
 
-    ingredientList.style.display = "block";
     document.querySelector("#ingredients-section .warn-msg").style.display = "none";
 }
 
@@ -144,7 +143,7 @@ function createIngredientTableRow(ingredient) {
         </div>
         <div class="ing-name-cell">${ingredient.name}</div>
         <div>
-            <input id="ingredients${ingNumber}.quantity" name="ingredients[${ingNumber}].quantity" value="1.0"
+            <input id="ingredients${ingNumber}.quantity" name="ingredients[${ingNumber}].quantity" value="1"
                    class="qty-input" type="text" size="6" maxlength="6" placeholder="Кількість" 
                    pattern=" *(?:[1-9]\\d*|(?:0|[1-9]\\d*)[\\.,]\\d) *" autocomplete="off" required>
         </div>
@@ -172,11 +171,7 @@ function removeIngredientRow(btn) {
 
     btn.parentNode.parentElement.remove();
 
-    if (ingredientList.childElementCount > 0) {
-        correctIngRowIndexes();
-    } else {
-        ingredientList.style.display = "none";
-    }
+    correctIngRowIndexes();
 }
 
 function correctIngRowIndexes() {

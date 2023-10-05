@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" th:with="isEditMode=${#bools.isTrue(editMode)}">
+<head xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <meta charset="UTF-8">
-    <title>Додайте рецепт</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles/styles1.css" th:href="@{/styles/styles1.css}">
+    <title th:text="${isEditMode ? 'Редагування рецепта' : 'Додайте рецепт'}">Recipe</title>
+    <link rel="stylesheet" type="text/css" href="/styles/recipe-form.css" th:href="@{/styles/recipe-form.css}">
 </head>
 <body>
     <main>
-        <h1>Додайте рецепт</h1>
-        <form method="post" action="#" th:action="@{/recipes/add}" th:object="${recipe}" name="recipe-form">
+        <a href="#" th:href="@{/}">Повернутися на головну</a>
+        <h1 th:text="${isEditMode ? 'Редагування рецепта' : 'Додайте рецепт'}">Recipe</h1>
+        <form name="recipe-form" th:object="${recipe}" th:method="${isEditMode ? 'put' : 'post'}" action="#"
+              th:action="@{__${isEditMode ? '/recipes/{id}/edit(id=${recipe.id})' : '/recipes/add'}__}">
+            <input type="hidden" th:if="${isEditMode}" th:field="*{id}">
             <table id="recipe-head-table">
                 <tr>
                     <td><label th:for="${#ids.next('name')}">Назва:</label></td>
@@ -32,16 +35,43 @@
                 </div>
                 <p class="warn-msg">Додайте принаймні один інгредієнт</p>
 
-                <ul id="ingredients-list"></ul>
+                <ul id="ingredients-list">
+                    <li draggable="true" th:each="ingred, itr : *{ingredients}">
+                        <div><i class="drag-indicator"></i></div>
+                        <div class="ing-id-cell">
+                            <input type="hidden" th:field="*{ingredients[__${itr.index}__].ingredient}">
+                        </div>
+                        <div class="ing-name-cell" th:text="${ingred.ingredient.name}">Ingredient</div>
+                        <div>
+                            <input th:field="*{ingredients[__${itr.index}__].quantity}" value="1"
+                                   class="qty-input" type="text" size="6" maxlength="6" placeholder="Кількість"
+                                   pattern=" *(?:[1-9]\d*|(?:0|[1-9]\d*)[\.,]\d) *" autocomplete="off" required>
+                        </div>
+                        <div>
+                            <select class="ing-measure-select" th:field="*{ingredients[__${itr.index}__].measure}">
+                                <option th:each="meas : ${ingred.ingredient.type.measures}"
+                                        th:text="${meas.title}" th:value="${meas.id}">kg</option>
+                            </select>
+                        </div>
+                        <div>
+                            <input type="text" th:field="*{ingredients[__${itr.index}__].note}"
+                                   placeholder="Примітка" maxlength="20" autocomplete="off">
+                        </div>
+                        <div>
+                            <button type="button" class="remove-ingredient-btn" tabindex="-1"
+                                    onclick="removeIngredientRow(this)">❌</button>
+                        </div>
+                    </li>
+                </ul>
             </section>
             <section id="stages-section">
                 <h3>Етапи приготування</h3>
                 <p class="warn-msg">Додайте принаймні один етап приготування</p>
                 <table id="stage-table">
                     <tbody>
-                        <tr>
+                        <tr th:each="stage : *{stages}">
                             <td>
-                                <textarea class="stage-input-area" id="stages0" name="stages[0]"
+                                <textarea class="stage-input-area" th:field="*{stages[__${stageStat.index}__]}"
                                           placeholder="Введіть вказівки до приготування" required></textarea>
                             </td>
                             <td>
@@ -67,7 +97,7 @@
             <input type="submit" value="Надіслати рецепт">
         </form>
     </main>
-    <script src="/scripts/add-recipe-form-script.js" th:src="@{/scripts/add-recipe-form-script.js}"></script>
-    <script src="/scripts/add-recipe-form-validation.js" th:src="@{/scripts/add-recipe-form-validation.js}"></script>
+    <script src="/scripts/recipe-form-script.js" th:src="@{/scripts/recipe-form-script.js}"></script>
+    <script src="/scripts/recipe-form-validation.js" th:src="@{/scripts/recipe-form-validation.js}"></script>
 </body>
 </html>

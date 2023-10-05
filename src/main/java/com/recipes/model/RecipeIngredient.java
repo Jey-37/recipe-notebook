@@ -1,5 +1,6 @@
 package com.recipes.model;
 
+import com.recipes.model.dto.RecipeIngredientDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,19 +34,16 @@ public class RecipeIngredient
 
     protected RecipeIngredient() {}
 
-    public RecipeIngredient(Recipe recipe, Ingredient ingredient, Measure measure,
+    public RecipeIngredient(Ingredient ingredient, Measure measure,
                             double quantity, String note) {
-        if (recipe.getId() == 0) {
-            throw new IllegalStateException("Recipe is transient: " + recipe);
-        }
-        this.id = new Id(recipe.getId(), ingredient.getId());
         this.ingredient = ingredient;
         this.measure = measure;
         this.quantity = quantity;
         this.note = note;
-        this.num = recipe.getRecipeIngredients().size();
+    }
 
-        recipe.addRecipeIngredient(this);
+    public RecipeIngredientDto toDto() {
+        return new RecipeIngredientDto(ingredient, measure, quantity, note);
     }
 
     @Embeddable

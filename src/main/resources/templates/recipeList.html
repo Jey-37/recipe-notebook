@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <meta charset="UTF-8">
+    <title>Рецепти</title>
+    <link rel="stylesheet" type="text/css" href="/styles/recipe-list.css" th:href="@{/styles/recipe-list.css}">
+</head>
+<body>
+    <main>
+        <a href="#" th:href="@{/}">Повернутися на головну</a>
+        <h1>Рецепти</h1>
+        <ol id="recipe-list">
+            <li th:each="recipe : ${recipes}">
+                <p th:text="${recipe.name}"><b>Рецепт</b></p>
+                <a th:href="@{/recipes/{recipeId}/edit(recipeId=${recipe.id})}">
+                    <button type="button">Редагувати</button>
+                </a>
+            </li>
+        </ol>
+    </main>
+</body>
+</html>

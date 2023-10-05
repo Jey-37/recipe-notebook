@@ -1,11 +1,14 @@
 package com.recipes.model;
 
+import com.recipes.model.dto.RecipeForm;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -14,6 +17,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -54,20 +58,26 @@ public class Recipe
     @OrderColumn(name = "stage", nullable = false)
     private List<String> stages = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @Setter(AccessLevel.NONE)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "rec_id")
     @org.hibernate.annotations.OrderBy(clause = "num")
     private Set<RecipeIngredient> recipeIngredients = new LinkedHashSet<>();
 
-    public void addTag(Tag tag) {
-        tags.add(tag);
-    }
-
-    public void addCookingStage(String stage) {
-        stages.add(stage);
-    }
-
     public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
+        recipeIngredient.setNum(recipeIngredients.size());
         recipeIngredients.add(recipeIngredient);
+    }
+
+    public RecipeForm toRecipeForm() {
+        RecipeForm form = new RecipeForm();
+        form.setId(id);
+        form.setName(name);
+        form.setPortionsNumber(portionsNumber);
+        form.setTags(tags);
+        form.setStages(stages);
+        form.setIngredients(recipeIngredients.stream().map(RecipeIngredient::toDto).collect(Collectors.toList()));
+
+        return form;
     }
 }

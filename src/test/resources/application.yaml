@@ -4,7 +4,7 @@ spring:
     url: jdbc:h2:mem:recipes
     #url: jdbc:h2:file:/data/recipes;AUTO_SERVER=TRUE
   jpa:
-    show-sql: true
+    #show-sql: true
     properties:
       hibernate:
         format_sql: true
