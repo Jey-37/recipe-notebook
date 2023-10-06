@@ -14,7 +14,7 @@ ingredientList.addEventListener("input", evt => {
     }
 });
 
-stageTable.addEventListener("input", evt => {
+stageList.addEventListener("input", evt => {
     if (evt.target.classList.contains("stage-input-area")) {
         evt.target.classList.remove("invalid");
     }
@@ -88,7 +88,7 @@ function checkIngredQuantityFields() {
 }
 
 function checkNumberOfStages() {
-    if (stageTable.childElementCount === 0) {
+    if (stageList.childElementCount === 0) {
         formIsValid = false;
         document.querySelector("#stages-section .warn-msg").style.display = "block";
         return false;

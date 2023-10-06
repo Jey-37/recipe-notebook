@@ -12,18 +12,23 @@
         <form name="recipe-form" th:object="${recipe}" th:method="${isEditMode ? 'put' : 'post'}" action="#"
               th:action="@{__${isEditMode ? '/recipes/{id}/edit(id=${recipe.id})' : '/recipes/add'}__}">
             <input type="hidden" th:if="${isEditMode}" th:field="*{id}">
-            <table id="recipe-head-table">
-                <tr>
-                    <td><label th:for="${#ids.next('name')}">Назва:</label></td>
-                    <td><input type="text" th:field="*{name}" autocomplete="off" maxlength="60"
-                               placeholder="Введіть назву страви" required/></td>
-                </tr>
-                <tr>
-                    <td><label th:for="${#ids.next('portionsNumber')}">Кількість порцій:</label></td>
-                    <td><input type="number" th:field="*{portionsNumber}" value="1" min="1" max="25"
-                               placeholder="Введіть число порцій" required/></td>
-                </tr>
-            </table>
+            <section id="main-info-section">
+                <div id="main-info-wrapper">
+                    <div>
+                        <label th:for="${#ids.next('name')}">Назва</label>
+                        <input type="text" th:field="*{name}" autocomplete="off" maxlength="60"
+                               placeholder="Введіть назву страви" required/>
+                    </div>
+                    <div>
+                        <label th:for="${#ids.next('portionsNumber')}">Кількість порцій</label>
+                        <input type="number" th:field="*{portionsNumber}" value="1" min="1" max="25"
+                               placeholder="Введіть число порцій" required/>
+                    </div>
+                    <label th:for="${#ids.next('description')}">Опис</label><br>
+                    <textarea id="description-field" th:field="*{description}"
+                              placeholder="Введіть опис рецепту" maxlength="500"></textarea>
+                </div>
+            </section>
             <section id="ingredients-section">
                 <h3>Інгредієнти</h3>
                 <div class="dropdown">
@@ -67,20 +72,14 @@
             <section id="stages-section">
                 <h3>Етапи приготування</h3>
                 <p class="warn-msg">Додайте принаймні один етап приготування</p>
-                <table id="stage-table">
-                    <tbody>
-                        <tr th:each="stage : *{stages}">
-                            <td>
-                                <textarea class="stage-input-area" th:field="*{stages[__${stageStat.index}__]}"
-                                          placeholder="Введіть вказівки до приготування" required></textarea>
-                            </td>
-                            <td>
-                                <button type="button" class="remove-stage-btn" tabindex="-1"
-                                        onclick="removeStage(this)">❌</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <ul id="stages-list">
+                    <li th:each="stage : *{stages}">
+                        <div><textarea class="stage-input-area" th:field="*{stages[__${stageStat.index}__]}"
+                                       placeholder="Введіть вказівки до приготування" required></textarea></div>
+                        <div><button type="button" class="remove-stage-btn" tabindex="-1"
+                                     onclick="removeStage(this)">❌</button></div>
+                    </li>
+                </ul>
                 <button type="button" id="add-stage-btn">Додати етап</button>
             </section>
             <section id="tags-section">

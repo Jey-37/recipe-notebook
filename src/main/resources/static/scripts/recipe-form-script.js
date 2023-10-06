@@ -6,8 +6,8 @@ const shownIngredients = [];
 const ingredSearchField = document.getElementById("ingredient-search");
 const dropdownContent = document.getElementsByClassName("dropdown-content")[0]
 const resList = document.getElementsByClassName("dropdown-results-list")[0];
-const ingredientList = document.querySelector("#ingredients-list");
-const stageTable = document.querySelector("#stage-table tbody");
+const ingredientList = document.getElementById("ingredients-list");
+const stageList = document.getElementById("stages-list");
 
 document.forms["recipe-form"].addEventListener("keypress", e => {
     if (e.keyCode === 13) {
@@ -122,6 +122,7 @@ function addIngredient(evt) {
     ingredSearchField.value = "";
 
     document.querySelector("#ingredients-section .warn-msg").style.display = "none";
+    ingredientList.style.display = "block";
 }
 
 function createIngredientTableRow(ingredient) {
@@ -171,6 +172,9 @@ function removeIngredientRow(btn) {
 
     btn.parentNode.parentElement.remove();
 
+    if (ingredientList.childElementCount === 0) {
+        ingredientList.style.display = "none";
+    }
     correctIngRowIndexes();
 }
 
@@ -187,29 +191,29 @@ function correctIngRowIndexes() {
 }
 
 function addStage() {
-    const stageNumber = stageTable.childElementCount;
+    const stageNumber = stageList.childElementCount;
 
-    const stageRow = document.createElement("tr");
+    const stageRow = document.createElement("li");
     stageRow.innerHTML = `
-        <td>
+        <div>
             <textarea class="stage-input-area" id="stages${stageNumber}" name="stages[${stageNumber}]"
                       placeholder="Введіть вказівки до приготування"></textarea>
-        </td>
-        <td>
+        </div>
+        <div>
             <button type="button" class="remove-stage-btn" tabindex="-1"
                     onclick="removeStage(this)">❌</button>
-        </td>`;
+        </div>`;
 
-    stageTable.appendChild(stageRow);
+    stageList.appendChild(stageRow);
 }
 
 function removeStage(btn) {
     btn.parentNode.parentElement.remove();
 
-    const stageTableRows = stageTable.children;
+    const stageListRows = stageList.children;
 
-    for (let i = 0; i < stageTableRows.length; i++) {
-        const textarea = stageTableRows[i].getElementsByTagName("textarea")[0];
+    for (let i = 0; i < stageListRows.length; i++) {
+        const textarea = stageListRows[i].getElementsByTagName("textarea")[0];
         textarea.id = textarea.id.replace(/stages\d+/, "stages"+i);
         textarea.name = textarea.name.replace(/stages\[\d+]/, "stages["+i+"]");
     }
