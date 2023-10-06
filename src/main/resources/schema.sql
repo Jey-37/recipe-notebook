@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS recipes (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(200) NOT NULL,
     create_date TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    portions_number TINYINT
+    portions_number TINYINT,
+    description VARCHAR(1000)
 );
 
 CREATE TABLE IF NOT EXISTS tags (
@@ -66,7 +67,7 @@ CREATE TABLE IF NOT EXISTS recipes_ingredients (
 
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
+    name VARCHAR(200) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS cooked_recipes (

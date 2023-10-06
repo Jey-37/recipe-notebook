@@ -16,6 +16,7 @@ public class RecipeForm
     private long id;
     private String name;
     private int portionsNumber = 1;
+    private String description;
     private Set<Tag> tags = new HashSet<>();
     private List<String> stages = new ArrayList<>();
     private List<RecipeIngredient> ingredients = new ArrayList<>();
@@ -25,6 +26,7 @@ public class RecipeForm
         recipe.setId(id);
         recipe.setName(name);
         recipe.setPortionsNumber(portionsNumber);
+        recipe.setDescription(description);
         recipe.setTags(tags);
         recipe.setStages(stages);
         ingredients.forEach(recipe::addIngredient);

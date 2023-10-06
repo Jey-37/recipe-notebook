@@ -39,6 +39,8 @@ public class Recipe
     @Positive @Max(25)
     private int portionsNumber;
 
+    private String description;
+
     @Size(min = 1, message = "You must choose at least one tag")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -74,6 +76,7 @@ public class Recipe
         form.setId(id);
         form.setName(name);
         form.setPortionsNumber(portionsNumber);
+        form.setDescription(description);
         form.setTags(tags);
         form.setStages(stages);
         form.setIngredients(ingredients.stream().toList());
