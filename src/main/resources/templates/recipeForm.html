@@ -28,6 +28,12 @@
                     <textarea id="description-field" th:field="*{description}"
                               placeholder="Введіть опис рецепту" maxlength="500"></textarea>
                 </div>
+                <div id="main-photo-wrapper">
+                    <label id="main-photo-label">
+                        <input type="file" name="main-photo" accept="image/jpeg,image/png"/>
+                        <i class="photo-upload-pict"></i>
+                    </label>
+                </div>
             </section>
             <section id="ingredients-section">
                 <h3>Інгредієнти</h3>

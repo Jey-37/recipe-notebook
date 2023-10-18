@@ -77,8 +77,9 @@ section h3 {
     margin-bottom: 15px;
 }
 
-#main-info-section label {
-    font-weight: bold;
+#main-info-section {
+    display: flex;
+    justify-content: space-between;
 }
 
 #main-info-wrapper {
@@ -94,6 +95,7 @@ section h3 {
 }
 
 #main-info-wrapper label {
+    font-weight: bold;
     width: 40%;
 }
 
@@ -107,6 +109,41 @@ section h3 {
     width: 100%;
     min-height: 4em;
     max-height: 10em;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+#main-photo-wrapper {
+    width: 250px;
+    height: 190px;
+}
+
+#main-photo-label {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    color: #cdcdcd;
+    background-color: #f4f4f4;
+    outline: #cdcdcd solid 2px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.photo-upload-pict {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    font-size: 6em;
+}
+
+.photo-upload-pict:before {
+    content: "\e439";
 }
 
 .dropdown {
