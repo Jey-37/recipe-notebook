@@ -15,11 +15,12 @@ document.forms["recipe-form"].addEventListener("keypress", e => {
     }
 });
 
-document["recipe-form"]["main-photo"].addEventListener("change", evt => {
+document["recipe-form"]["mainPhoto"].addEventListener("change", evt => {
     const [file] = evt.target.files;
     if (file) {
-        document.getElementById("main-photo-label").style.backgroundImage = "url("+URL.createObjectURL(file)+")";
-        document.getElementsByClassName("photo-upload-pict")[0].style.visibility = "hidden";
+        const mainPhoto = document.getElementById("main-photo-img");
+        mainPhoto.src = URL.createObjectURL(file);
+        document.getElementsByClassName("photo-upload-icon")[0].style.visibility = "hidden";
     }
 }, false);
 

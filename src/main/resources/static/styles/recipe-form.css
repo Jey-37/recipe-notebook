@@ -111,40 +111,55 @@ section h3 {
     max-height: 10em;
 }
 
+
 input[type="file"] {
     display: none;
 }
 
-#main-photo-wrapper {
+.image-upload-container {
     width: 250px;
     height: 190px;
-}
-
-#main-photo-label {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    color: #cdcdcd;
     background-color: #f4f4f4;
     outline: #cdcdcd solid 2px;
     border-radius: 5px;
-    cursor: pointer;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
 }
 
-.photo-upload-pict {
+.image-upload-label {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.photo-upload-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #cdcdcd;
     font-family: 'Material Symbols Outlined';
     font-style: normal;
     font-size: 6em;
 }
 
-.photo-upload-pict:before {
+.photo-upload-icon:before {
     content: "\e439";
 }
+
+.chosen-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.chosen-image[src=""] {
+    display: none;
+}
+
 
 .dropdown {
     position: relative;

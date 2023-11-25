@@ -10,7 +10,8 @@
         <a href="#" th:href="@{/}">Повернутися на головну</a>
         <h1 th:text="${isEditMode ? 'Редагування рецепта' : 'Додайте рецепт'}">Recipe</h1>
         <form name="recipe-form" th:object="${recipe}" th:method="${isEditMode ? 'put' : 'post'}" action="#"
-              th:action="@{__${isEditMode ? '/recipes/{id}/edit(id=${recipe.id})' : '/recipes/add'}__}">
+              th:action="@{__${isEditMode ? '/recipes/{id}/edit(id=${recipe.id})' : '/recipes/add'}__}"
+              enctype="multipart/form-data">
             <input type="hidden" th:if="${isEditMode}" th:field="*{id}">
             <section id="main-info-section">
                 <div id="main-info-wrapper">
@@ -28,11 +29,12 @@
                     <textarea id="description-field" th:field="*{description}"
                               placeholder="Введіть опис рецепту" maxlength="500"></textarea>
                 </div>
-                <div id="main-photo-wrapper">
-                    <label id="main-photo-label">
-                        <input type="file" name="main-photo" accept="image/jpeg,image/png"/>
-                        <i class="photo-upload-pict"></i>
+                <div class="image-upload-container">
+                    <label for="mainPhoto" class="image-upload-label">
+                        <input type="file" id="mainPhoto" name="mainPhoto" accept="image/jpeg,image/png">
+                        <i class="photo-upload-icon"></i>
                     </label>
+                    <img id="main-photo-img" class="chosen-image" src="">
                 </div>
             </section>
             <section id="ingredients-section">
