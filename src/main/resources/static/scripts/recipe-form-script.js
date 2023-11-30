@@ -20,10 +20,11 @@ document["recipe-form"]["mainPhoto"].addEventListener("change", evt => {
     if (file) {
         const mainPhoto = document.getElementById("main-photo-img");
         mainPhoto.src = URL.createObjectURL(file);
-        document.getElementsByClassName("photo-upload-icon")[0].style.visibility = "hidden";
     }
 }, false);
 
+
+/*--------------- Dropdown list event listeners -----------------*/
 const showDropdown = () => {dropdownContent.style.display = "block"};
 const hideDropdown = () => {dropdownContent.style.display = "none"};
 
@@ -35,6 +36,7 @@ resList.addEventListener("mousedown", () => {
     document.addEventListener("mouseup", docOnMouseUpFunc);
     ingredSearchField.removeEventListener("focusout", hideDropdown);
 });
+/*---------------------------------------------------------------*/
 
 document.getElementById("add-stage-btn").addEventListener("click", addStage);
 
@@ -71,6 +73,34 @@ ingredientList.addEventListener("mouseleave", evt => {
 });
 ingredientList.addEventListener("dragover", changeListOrder);
 ingredientList.addEventListener("dragenter", e => e.preventDefault());
+/*---------------------------------------------------------------*/
+
+/*------------------------- Observers ---------------------------*/
+let mainPhoto = document.getElementById("main-photo-img");
+
+let changeUploadIconVisibility = () => {
+    document.querySelector("#main-info-section .photo-upload-icon")
+        .style.display = mainPhoto.getAttribute("src").trim().length === 0 ? "block" : "none";
+}
+
+changeUploadIconVisibility();
+
+let imageSrcObserver = new MutationObserver(changeUploadIconVisibility);
+
+imageSrcObserver.observe(mainPhoto, {
+    attributes: true,
+    attributeFilter: ['src']
+});
+
+let changeIngredientListVisibility = () => {
+    ingredientList.style.display = ingredientList.childElementCount > 0 ? "block" : "none";
+}
+
+changeIngredientListVisibility();
+
+let ingredientListContentsObserver = new MutationObserver(changeIngredientListVisibility);
+
+ingredientListContentsObserver.observe(ingredientList, { childList: true });
 /*---------------------------------------------------------------*/
 
 
@@ -131,7 +161,6 @@ function addIngredient(evt) {
     ingredSearchField.value = "";
 
     document.querySelector("#ingredients-section .warn-msg").style.display = "none";
-    ingredientList.style.display = "block";
 }
 
 function createIngredientTableRow(ingredient) {
@@ -181,9 +210,6 @@ function removeIngredientRow(btn) {
 
     btn.parentNode.parentElement.remove();
 
-    if (ingredientList.childElementCount === 0) {
-        ingredientList.style.display = "none";
-    }
     correctIngRowIndexes();
 }
 
@@ -191,7 +217,7 @@ function correctIngRowIndexes() {
     const ingTableRows = ingredientList.children;
 
     for (let i = 0; i < ingTableRows.length; i++) {
-        const rowInputs = ingTableRows[i].getElementsByTagName("input");
+        const rowInputs = ingTableRows[i].querySelectorAll("input, select");
         for (let input of rowInputs) {
             input.id = input.id.replace(/ingredients\d+/, "ingredients"+i);
             input.name = input.name.replace(/ingredients\[\d+]/, "ingredients["+i+"]");

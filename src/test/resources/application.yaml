@@ -11,3 +11,4 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: none
+uploads-path: C:/uploads/

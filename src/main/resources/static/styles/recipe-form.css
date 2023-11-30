@@ -136,6 +136,7 @@ input[type="file"] {
 }
 
 .photo-upload-icon {
+    display: none;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -202,7 +203,6 @@ input[type="file"] {
 
 #ingredients-list {
     margin: 20px;
-    display: none;
 }
 
 #ingredients-list li {

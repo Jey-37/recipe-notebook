@@ -16,3 +16,7 @@ spring:
     hibernate:
       ddl-auto: create-drop
     defer-datasource-initialization: true
+  servlet:
+    multipart:
+      location: /tmp
+uploads-path: C:/uploads/

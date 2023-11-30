@@ -2,11 +2,14 @@ package com.recipes.service;
 
 import com.recipes.model.Recipe;
 import com.recipes.model.RecipeIngredient;
+import com.recipes.model.dto.RecipeForm;
 import com.recipes.repo.RecipeIngredientRepository;
 import com.recipes.repo.RecipeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
@@ -19,24 +22,34 @@ public class DbService
 
     private final RecipeIngredientRepository recIngRepo;
 
-    public DbService(RecipeRepository recipeRepo, RecipeIngredientRepository recIngRepo) {
+    private final FileStorageService fileStorageService;
+
+    public DbService(RecipeRepository recipeRepo, RecipeIngredientRepository recIngRepo,
+                     FileStorageService fileStorageService) {
         this.recipeRepo = recipeRepo;
         this.recIngRepo = recIngRepo;
+        this.fileStorageService = fileStorageService;
     }
 
     @Transactional
-    public Recipe saveRecipe(Recipe recipe) {
+    public Recipe saveRecipe(RecipeForm recipeForm) {
+        Recipe recipe = recipeForm.toRecipe();
         recipeRepo.save(recipe);
 
         recipe.getIngredients().forEach(
                 ing -> ing.setId(new RecipeIngredient.Id(recipe.getId(), ing.getIngredient().getId())));
         recIngRepo.saveAll(recipe.getIngredients());
 
+        if (recipeForm.getMainPhoto() != null) {
+            updateRecipeMainPhoto(recipe, recipeForm.getMainPhoto());
+        }
+
         return recipe;
     }
 
     @Transactional
-    public void updateRecipe(Recipe newRecipe) {
+    public void updateRecipe(RecipeForm recipeForm) {
+        Recipe newRecipe = recipeForm.toRecipe();
         newRecipe.getIngredients().forEach(
                 ing -> ing.setId(new RecipeIngredient.Id(newRecipe.getId(), ing.getIngredient().getId())));
 
@@ -48,5 +61,18 @@ public class DbService
 
         recIngRepo.deleteAll(oldRecipe.getIngredients());
         recIngRepo.saveAll(newRecipe.getIngredients());
+
+        if (recipeForm.getMainPhoto() != null && !recipeForm.getMainPhoto().isEmpty()) {
+            updateRecipeMainPhoto(oldRecipe, recipeForm.getMainPhoto());
+        }
+    }
+
+    private void updateRecipeMainPhoto(Recipe recipe, MultipartFile photo) {
+        try {
+            String mainPhotoFileName = fileStorageService.saveMainPhoto(recipe, photo);
+            recipe.setMainPhotoName(mainPhotoFileName);
+        } catch (IOException exception) {
+            log.warning(exception.getMessage());
+        }
     }
 }

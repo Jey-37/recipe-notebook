@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -40,6 +39,8 @@ public class Recipe
     private int portionsNumber;
 
     private String description;
+
+    private String mainPhotoName;
 
     @Size(min = 1, message = "You must choose at least one tag")
     @ManyToMany(fetch = FetchType.EAGER)

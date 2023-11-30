@@ -7,7 +7,8 @@
 </head>
 <body>
     <main>
-        <a href="#" th:href="@{/}">Повернутися на головну</a>
+        <a th:unless="${isEditMode}" th:href="@{/}" href="#">Повернутися на головну</a>
+        <a th:if="${isEditMode}" th:href="@{/recipes}" href="#">Повернутися до списку рецептів</a>
         <h1 th:text="${isEditMode ? 'Редагування рецепта' : 'Додайте рецепт'}">Recipe</h1>
         <form name="recipe-form" th:object="${recipe}" th:method="${isEditMode ? 'put' : 'post'}" action="#"
               th:action="@{__${isEditMode ? '/recipes/{id}/edit(id=${recipe.id})' : '/recipes/add'}__}"
@@ -16,32 +17,33 @@
             <section id="main-info-section">
                 <div id="main-info-wrapper">
                     <div>
-                        <label th:for="${#ids.next('name')}">Назва</label>
+                        <label th:for="name">Назва</label>
                         <input type="text" th:field="*{name}" autocomplete="off" maxlength="60"
                                placeholder="Введіть назву страви" required/>
                     </div>
                     <div>
-                        <label th:for="${#ids.next('portionsNumber')}">Кількість порцій</label>
+                        <label th:for="portionsNumber">Кількість порцій</label>
                         <input type="number" th:field="*{portionsNumber}" value="1" min="1" max="25"
                                placeholder="Введіть число порцій" required/>
                     </div>
-                    <label th:for="${#ids.next('description')}">Опис</label><br>
+                    <label for="description-field">Опис</label><br>
                     <textarea id="description-field" th:field="*{description}"
                               placeholder="Введіть опис рецепту" maxlength="500"></textarea>
                 </div>
                 <div class="image-upload-container">
-                    <label for="mainPhoto" class="image-upload-label">
-                        <input type="file" id="mainPhoto" name="mainPhoto" accept="image/jpeg,image/png">
+                    <label th:for="mainPhoto" class="image-upload-label">
+                        <input type="file" th:field="*{mainPhoto}" accept="image/jpeg,image/png">
                         <i class="photo-upload-icon"></i>
                     </label>
-                    <img id="main-photo-img" class="chosen-image" src="">
+                    <img id="main-photo-img" class="chosen-image" alt="Recipe's main photo"
+                         th:src="${mainPhotoPath} ? '/uploads/'+${mainPhotoPath} : ''" src="">
                 </div>
             </section>
             <section id="ingredients-section">
                 <h3>Інгредієнти</h3>
                 <div class="dropdown">
-                    <input id="ingredient-search" type="search" name="search"
-                           autocomplete="off" placeholder="Почніть вводити інгредієнт..."/>
+                    <input id="ingredient-search" type="search" autocomplete="off"
+                           placeholder="Почніть вводити інгредієнт..."/>
                     <div class="dropdown-content">
                         <ul class="dropdown-results-list"></ul>
                     </div>

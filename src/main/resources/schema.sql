@@ -3,12 +3,13 @@ CREATE TABLE IF NOT EXISTS recipes (
     name VARCHAR(200) NOT NULL,
     create_date TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     portions_number TINYINT,
-    description VARCHAR(1000)
+    description VARCHAR(1000),
+    main_photo_name VARCHAR(200)
 );
 
 CREATE TABLE IF NOT EXISTS tags (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
+    name VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS recipes_tagsjt (
@@ -47,7 +48,7 @@ CREATE TABLE IF NOT EXISTS types_measuresjt (
 
 CREATE TABLE IF NOT EXISTS ingredients (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(70) NOT NULL,
+    name VARCHAR(100) NOT NULL,
     type INT NOT NULL,
     FOREIGN KEY (type) REFERENCES ingredient_types (id)
 );
@@ -58,7 +59,7 @@ CREATE TABLE IF NOT EXISTS recipes_ingredients (
     num TINYINT NOT NULL,
     meas_id INT NOT NULL,
     quantity DECIMAL(5,1),
-    note VARCHAR(60),
+    note VARCHAR(100),
     PRIMARY KEY (rec_id, ing_id),
     FOREIGN KEY (rec_id) REFERENCES recipes (id) ON DELETE CASCADE,
     FOREIGN KEY (ing_id) REFERENCES ingredients (id),

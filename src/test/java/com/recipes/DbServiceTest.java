@@ -57,7 +57,7 @@ public class DbServiceTest
 
         int ingNum = recipe.getIngredients().size();
 
-        dbService.saveRecipe(recipe);
+        recipe = dbService.saveRecipe(recipe.toRecipeForm());
 
         Assertions.assertNotEquals(0L, recipe.getId());
         Assertions.assertNotNull(recipe.getCreateDate());
@@ -72,12 +72,12 @@ public class DbServiceTest
 
     @Test
     public void recipeUpdating() {
-        Recipe oldRecipe = dbService.saveRecipe(createRecipe());
+        Recipe oldRecipe = dbService.saveRecipe(createRecipe().toRecipeForm());
 
         Recipe newRecipe = createRecipe();
         newRecipe.setId(oldRecipe.getId());
 
-        dbService.updateRecipe(newRecipe);
+        dbService.updateRecipe(newRecipe.toRecipeForm());
 
         Recipe loadedRecipe = recipeRepo.findById(newRecipe.getId()).get();
 
