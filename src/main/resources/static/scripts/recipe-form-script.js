@@ -8,6 +8,8 @@ const dropdownContent = document.getElementsByClassName("dropdown-content")[0]
 const resList = document.getElementsByClassName("dropdown-results-list")[0];
 const ingredientList = document.getElementById("ingredients-list");
 const stageList = document.getElementById("stages-list");
+const mainPhoto = document.getElementById("main-photo-img");
+const mainPhotoInput = document["recipe-form"]["mainPhoto"];
 
 document.forms["recipe-form"].addEventListener("keypress", e => {
     if (e.keyCode === 13) {
@@ -15,11 +17,29 @@ document.forms["recipe-form"].addEventListener("keypress", e => {
     }
 });
 
-document["recipe-form"]["mainPhoto"].addEventListener("change", evt => {
+mainPhotoInput.addEventListener("change", evt => {
     const [file] = evt.target.files;
     if (file) {
         const mainPhoto = document.getElementById("main-photo-img");
         mainPhoto.src = URL.createObjectURL(file);
+    }
+}, false);
+
+document.getElementsByClassName("remove-image-btn")[0].addEventListener("click", evt => {
+    mainPhoto.setAttribute("src", "");
+    mainPhotoInput.value = "";
+    evt.target.style.display = "none";
+}, false);
+
+document.getElementsByClassName("image-upload-container")[0].addEventListener("mouseover", () => {
+    if (mainPhoto.getAttribute("src").length > 0) {
+        document.getElementsByClassName("remove-image-btn")[0].style.display = "block";
+    }
+}, false);
+
+document.getElementsByClassName("image-upload-container")[0].addEventListener("mouseout", () => {
+    if (mainPhoto.getAttribute("src").length > 0) {
+        document.getElementsByClassName("remove-image-btn")[0].style.display = "none";
     }
 }, false);
 
@@ -76,8 +96,6 @@ ingredientList.addEventListener("dragenter", e => e.preventDefault());
 /*---------------------------------------------------------------*/
 
 /*------------------------- Observers ---------------------------*/
-let mainPhoto = document.getElementById("main-photo-img");
-
 let changeUploadIconVisibility = () => {
     document.querySelector("#main-info-section .photo-upload-icon")
         .style.display = mainPhoto.getAttribute("src").trim().length === 0 ? "block" : "none";
@@ -197,7 +215,7 @@ function createIngredientTableRow(ingredient) {
                    name="ingredients[${ingNumber}].note" autocomplete="off">
         </div>
         <div>
-            <button type="button" class="remove-ingredient-btn" tabindex="-1" 
+            <button type="button" class="remove-btn remove-ingredient-btn" tabindex="-1" 
                     onclick="removeIngredientRow(this)">❌</button>
         </div>`;
 
@@ -235,7 +253,7 @@ function addStage() {
                       placeholder="Введіть вказівки до приготування"></textarea>
         </div>
         <div>
-            <button type="button" class="remove-stage-btn" tabindex="-1"
+            <button type="button" class="remove-btn remove-stage-btn" tabindex="-1"
                     onclick="removeStage(this)">❌</button>
         </div>`;
 

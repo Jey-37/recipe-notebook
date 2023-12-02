@@ -43,7 +43,7 @@ h3 {
     font-size: 1.2em;
 }
 
-.remove-ingredient-btn, .remove-stage-btn {
+.remove-btn {
     background-color: transparent;
     border-style: none;
 }
@@ -159,6 +159,19 @@ input[type="file"] {
 
 .chosen-image[src=""] {
     display: none;
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 2;
+    display: none;
+    cursor: pointer;
+}
+
+.remove-image-btn:hover {
+    opacity: 80%;
 }
 
 

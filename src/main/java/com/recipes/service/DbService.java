@@ -40,9 +40,7 @@ public class DbService
                 ing -> ing.setId(new RecipeIngredient.Id(recipe.getId(), ing.getIngredient().getId())));
         recIngRepo.saveAll(recipe.getIngredients());
 
-        if (recipeForm.getMainPhoto() != null) {
-            updateRecipeMainPhoto(recipe, recipeForm.getMainPhoto());
-        }
+        updateRecipeMainPhoto(recipe, recipeForm.getMainPhoto());
 
         return recipe;
     }
@@ -62,9 +60,7 @@ public class DbService
         recIngRepo.deleteAll(oldRecipe.getIngredients());
         recIngRepo.saveAll(newRecipe.getIngredients());
 
-        if (recipeForm.getMainPhoto() != null && !recipeForm.getMainPhoto().isEmpty()) {
-            updateRecipeMainPhoto(oldRecipe, recipeForm.getMainPhoto());
-        }
+        updateRecipeMainPhoto(oldRecipe, recipeForm.getMainPhoto());
     }
 
     private void updateRecipeMainPhoto(Recipe recipe, MultipartFile photo) {

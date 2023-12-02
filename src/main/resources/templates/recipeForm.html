@@ -37,6 +37,7 @@
                     </label>
                     <img id="main-photo-img" class="chosen-image" alt="Recipe's main photo"
                          th:src="${mainPhotoPath} ? '/uploads/'+${mainPhotoPath} : ''" src="">
+                    <button type="button" class="remove-btn remove-image-btn" tabindex="-1">❌</button>
                 </div>
             </section>
             <section id="ingredients-section">
@@ -73,7 +74,7 @@
                                    placeholder="Примітка" maxlength="20" autocomplete="off">
                         </div>
                         <div>
-                            <button type="button" class="remove-ingredient-btn" tabindex="-1"
+                            <button type="button" class="remove-btn remove-ingredient-btn" tabindex="-1"
                                     onclick="removeIngredientRow(this)">❌</button>
                         </div>
                     </li>
@@ -86,7 +87,7 @@
                     <li th:each="stage : *{stages}">
                         <div><textarea class="stage-input-area" th:field="*{stages[__${stageStat.index}__]}"
                                        placeholder="Введіть вказівки до приготування" required></textarea></div>
-                        <div><button type="button" class="remove-stage-btn" tabindex="-1"
+                        <div><button type="button" class="remove-btn remove-stage-btn" tabindex="-1"
                                      onclick="removeStage(this)">❌</button></div>
                     </li>
                 </ul>

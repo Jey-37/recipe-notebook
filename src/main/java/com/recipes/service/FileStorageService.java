@@ -31,18 +31,20 @@ public class FileStorageService
         this.uploadsDir = uploadsDir;
     }
 
-    public String saveMainPhoto(Recipe recipe, MultipartFile file) throws IOException {
-        if (recipe.getMainPhotoName() != null)
-            removeMainPhoto(recipe);
+    public String saveMainPhoto(Recipe recipe, MultipartFile photo) throws IOException {
+        removeMainPhoto(recipe);
+
+        if (photo == null || photo.isEmpty())
+            return null;
 
         Path fileDir = resolveRecipeFullPath(recipe.getId());
         Files.createDirectories(fileDir);
 
-        String ofn = file.getOriginalFilename();
+        String ofn = photo.getOriginalFilename();
         String fileName = "mph-"+System.currentTimeMillis()+"."+ofn.substring(ofn.lastIndexOf('.')+1);
 
         Path filePath = Paths.get(fileDir.toString(), fileName);
-        file.transferTo(filePath);
+        photo.transferTo(filePath);
 
         return fileName;
     }
@@ -57,6 +59,8 @@ public class FileStorageService
     }
 
     public void removeMainPhoto(Recipe recipe) {
+        if (recipe.getMainPhotoName() == null) return;
+
         Path mainPhotoPath = Path.of(resolveRecipeFullPath(recipe.getId()).toString(), recipe.getMainPhotoName());
         try {
             Files.delete(mainPhotoPath);
